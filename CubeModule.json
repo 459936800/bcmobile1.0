@@ -1,0 +1,19 @@
+{
+	"name": "mobile-data-juzibc",
+	"dependencies": "a project about data Operating",
+	"identifier": "com.juzibc",
+	"releaseNote": "JUZ",
+	"hidden": false,
+	"autoDownload": true,
+	"relatesTo": [],
+	"dependsOn": [],
+	"dependsTo": [],
+	"action": "",
+	"index": "index.html",
+	"isPcTest": 0,
+	"isDebug": 0,
+	"build": 0,
+	"version": "1.0.0",
+	"testBuild": 0,
+	"testVersion": "1.0.0"
+}
