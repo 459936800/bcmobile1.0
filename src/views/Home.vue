@@ -56,7 +56,7 @@
       <!-- <van-col @click="toLottery" v-for="i of 9" :key="i" :index="i" span="8">
         <van-image round width="2.5rem" height="2.5rem" :src="require('../assets/image/k3.png')" />
         <p>幸运快3</p>
-        <p>15分钟1期</p>
+        <p>115分钟1期</p>
       </van-col>-->
       <van-col
         v-for="item of LotterysList"
@@ -89,24 +89,24 @@ export default {
       LotterysList: [
         {
           id: 0,
-          code: "ks",
+          code: "xyks",
           name: "幸运快3",
           pic: 0,
-          tip: "5分钟1期",
+          tip: "15分钟1期",
         },
         {
           id: 1,
-          code: "ks",
+          code: "gdks",
           name: "广东快3",
           pic: 0,
-          tip: "5分钟1期",
+          tip: "15分钟1期",
         },
         {
           id: 2,
-          code: "ks",
+          code: "njks",
           name: "南京快3",
           pic: 0,
-          tip: "5分钟1期",
+          tip: "15分钟1期",
         },
       ],
     };
@@ -128,7 +128,7 @@ export default {
     init() {
       // this._getLotterys();
       // this._getActivityDetail();
-      this._getHotLottery();
+      // this._getHotLottery();
     },
     toLottery(item) {
       this.$router.push({
@@ -172,10 +172,10 @@ export default {
           item.tip = "1分钟1期";
 
           if (item.code.indexOf("ssc") != -1) item.tip = "1分钟1期";
-          if (item.code.indexOf("pk10") != -1) item.tip = "5分钟1期";
+          if (item.code.indexOf("pk10") != -1) item.tip = "15分钟1期";
           if (item.code.indexOf("k3") != -1) item.tip = "3分钟1期";
-          if (item.code.indexOf("6hc") != -1) item.tip = "5分钟1期";
-          if (item.code.indexOf("11x5") != -1) item.tip = "5分钟1期";
+          if (item.code.indexOf("6hc") != -1) item.tip = "15分钟1期";
+          if (item.code.indexOf("11x5") != -1) item.tip = "15分钟1期";
 
           if (item.code.indexOf("ssc") != -1) item.pic = "ssc.png";
           if (item.code.indexOf("pk10") != -1) item.pic = "pk10.png";

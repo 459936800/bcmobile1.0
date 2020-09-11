@@ -126,13 +126,17 @@
 		methods: {
 			...mapActions(["getInfo"]),
 			...mapMutations(["setPlaytype", "setUser", "setShowLottery"]),
+			callLotteryRefresh() {
+				this.$root.Bus.$emit("Lottery_Refresh");
+			},
 			init() {
 				this.playTypeTitle = this.playTypeColumns[0];
+				this.setTabber();
 				this.getInfo().then(res => {
+					if (res.code != "200") return;
 					const user = JSON.stringify(res.user);
 					this.$comFun.cookie.setCookie("user", user);
 					this.setUser(res.user);
-					console.log(res.user);
 				});
 			},
 			setTabber() {
@@ -152,6 +156,7 @@
 				this.playTypeTitle = value;
 				this.setPlaytype(value);
 				this.showPicker = false;
+				this.callLotteryRefresh();
 			},
 			onConfirmLottery(value) {
 				this.value = value;

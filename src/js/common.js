@@ -43,6 +43,40 @@ let cookie = {
 let methods = {
 	back(router) {
 		router.go(-1);
+	},
+	getTimer(Time) {
+		let timer = 0;
+		let today = new Date();
+		let day = new Date(Time);
+		let mss = day - today;
+		function addZero(num) {
+			if (num < 10 && num > 0) {
+				return '0' + num;
+			} else if (num > -9 && num < 0) {
+				return '-0' + Math.abs(num);
+			}
+			return num;
+		}
+		var days = parseInt(mss / (1000 * 60 * 60 * 24));
+		var hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = parseInt((mss % (1000 * 60)) / 1000);
+		// if (hours == 0 && minutes == 0 && seconds < 11) {
+		// 	this.showNum = true;
+		// } else {
+		// 	this.showNum = false;
+		// }
+		timer = addZero(hours) + ':' + addZero(minutes) + ':' + addZero(seconds);
+		let data = {
+			today: today,
+			day: day,
+			timer: timer,
+			mss: mss,
+			hours: hours,
+			minutes: minutes,
+			seconds: seconds
+		};
+		return data;
 	}
 };
 

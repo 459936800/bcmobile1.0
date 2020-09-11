@@ -48,6 +48,7 @@
 <script>
 // @ is an alias to /src
 import { mapActions, mapGetters, mapMutations } from "vuex";
+import { Toast } from "vant";
 
 export default {
   name: "Logon",
@@ -73,7 +74,13 @@ export default {
     init() {
       // this.getCaptchaImage();
     },
-    _addUser() {
+    getCaptchaImage() {
+      this.captchaImage().then((res) => {
+        this.img = "data:image/gif;base64," + res.img;
+        this.uuid = res.uuid;
+      });
+    },
+    onSubmit() {
       let params = {
         userName: this.userName,
         nickName: this.nickName,
@@ -83,34 +90,9 @@ export default {
         phonenumber: this.phonenumber,
       };
       this.addUser(params).then((res) => {
-        this.LotterysList = res.rows;
-      });
-    },
-    getCaptchaImage() {
-      this.captchaImage().then((res) => {
-        this.img = "data:image/gif;base64," + res.img;
-        this.uuid = res.uuid;
-      });
-    },
-    onSubmit() {
-      let params = {
-        username: this.username,
-        password: this.password,
-        code: this.code,
-        uuid: this.uuid,
-      };
-      this.login(params).then((res) => {
-        if (res.token) {
-          this.$comFun.cookie.setCookie("Admin-Token", res.token);
-          this.setToken("Bearer " + res.token);
-          this.getInfo().then((res) => {
-            const user = JSON.stringify(res.user);
-            this.$comFun.cookie.setCookie("user", user);
-            this.setUser(res.user);
-            this.$router.push({
-              path: "index",
-            });
-          });
+        console.log(res);
+        if ((res.code = "200")) {
+          Toast("注册成功");
         }
       });
     },
