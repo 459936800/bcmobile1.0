@@ -132,6 +132,7 @@
 			init() {
 				this.playTypeTitle = this.playTypeColumns[0];
 				this.setTabber();
+				if (this.$route.name == "登录") return;
 				this.getInfo().then(res => {
 					if (res.code != "200") return;
 					const user = JSON.stringify(res.user);

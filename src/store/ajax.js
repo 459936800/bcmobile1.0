@@ -2,6 +2,7 @@ import axios from 'axios';
 import Vue from 'vue';
 import store from './index.js';
 import comFun from '../js/common';
+import { Toast } from "vant";
 
 var instance = axios.create({
 	baseURL: $conf.baseUrl,
@@ -10,7 +11,7 @@ var instance = axios.create({
 });
 // 请求拦截器
 instance.interceptors.request.use(
-	function(config) {
+	function (config) {
 		console.log('api:' + config.url);
 		const str = '/login,/captchaImage';
 		if (str.indexOf(config.url) == -1) {
@@ -19,22 +20,29 @@ instance.interceptors.request.use(
 		}
 		return config;
 	},
-	function(error) {
+	function (error) {
 		return Promise.reject(error);
 	}
 );
 
 instance.interceptors.response.use(
-	function(res) {
+	function (res) {
 		if (res.data.code != 200) {
-			// MessageBox.alert(res.data.msg, '温馨提示').then(() => {
-			// 	// comFun.cookie.clearCookie('Admin-Token');
-			// 	// window.location.href = 'http://' + window.location.host + '/login';
-			// });
+			Toast(res.data.msg)
+			comFun.cookie.clearCookie('Admin-Token');
+			setTimeout(() => {
+				window.location.href = 'http://' + window.location.host + '/login';
+			}, 2000);
+		} else {
+			if (res.data.user) {
+				const user = JSON.stringify(res.data.user);
+				comFun.cookie.setCookie("user", user);
+				store.commit('setUser', res.data.user);
+			}
 		}
 		return res.data;
 	},
-	function(error) {
+	function (error) {
 		if (error.response) {
 			// 请求已发送，服务器回复状态码在2xx之外
 			console.error(error.response);
@@ -51,13 +59,13 @@ instance.interceptors.response.use(
 		return Promise.reject(error);
 	}
 );
-const $get = function(obj, param) {
+const $get = function (obj, param) {
 	// if ($conf.isPcTest) {
 	return instance.get(obj, param);
 	// }
 };
 
-const $post = function(obj, param, option) {
+const $post = function (obj, param, option) {
 	return instance.post(obj, param, option);
 };
 

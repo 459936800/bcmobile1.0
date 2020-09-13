@@ -159,6 +159,9 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+			a {
+				color: #000;
+			}
 		}
 		.options {
 			width: 80%;

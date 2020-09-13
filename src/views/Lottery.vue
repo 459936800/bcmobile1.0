@@ -19,20 +19,22 @@
 				</van-row>
 				<van-row class="LotteryNumber" style="padding-top:1em">
 					<van-col span="12">
-						<!-- <span v-if="isLastLottery">第{{lotteryDetall.lastAwards.lotteryNumber}}</span> -->
-						<span>第{{lotteryDetall.newLottery.lotteryNumber}}</span>
+						<!-- v-if="isLastLottery" -->
+						<span>第{{lotteryDetall.lastAwards.lotteryNumber}}</span>
+						<!-- <span v-else>第{{lotteryDetall.newLottery.lotteryNumber}}</span> -->
 						<van-count-down :time="Lotterytime" />
 					</van-col>
 					<van-col span="12">
-						<!-- <span v-if="isLastLottery">{{lotteryDetall.lastAwards.lotteryNumber}}期开奖号码</span> -->
-						<span>{{lotteryDetall.newLottery.lotteryNumber}}期开奖号码</span>
+						<!-- v-if="isLastLottery" -->
+						<span>{{lotteryDetall.lastAwards.lotteryNumber}}期开奖号码</span>
+						<!-- <span v-else>{{lotteryDetall.newLottery.lotteryNumber}}期开奖号码</span> -->
 						<div>
-							<div v-show="isOpen">
+							<div v-show="!isLastLottery">
 								<i :class="'Dice Dice'+DiceNum[0]"></i>
 								<i :class="'Dice Dice'+DiceNum[1]"></i>
 								<i :class="'Dice Dice'+DiceNum[2]"></i>
 							</div>
-							<div v-show="!isOpen">
+							<div v-show="isLastLottery">
 								<i ref="rDice1" :class="'Dice rDice1'"></i>
 								<i ref="rDice2" :class="'Dice rDice2'"></i>
 								<i ref="rDice3" :class="'Dice rDice3'"></i>
@@ -156,7 +158,8 @@
 					obj: []
 				},
 				SumBettingList: [],
-				Lotterytime: 60 * 60 * 1000,
+				Lotterytime: 0,
+				newTime: "日",
 				maxRatio: 0,
 				number: 0,
 				bettingNumber: 0,
@@ -171,18 +174,18 @@
 				DiceNum: [6, 6, 6],
 				lotteryDetall: {
 					lastAwards: {
-						createTime: 1599637390000,
+						createTime: 0,
 						id: 642,
 						lotteryCode: "ahks",
-						lotteryNumber: "00000000000",
-						lotteryTime: 1589724863000,
+						lotteryNumber: "000000000",
+						lotteryTime: 0,
 						lotteryValue: "1,3,4"
 					},
 					newLottery: {
-						createTime: 1599638520319,
+						createTime: 0,
 						id: 652,
 						lotteryCode: "ahks",
-						lotteryNumber: "20200909023"
+						lotteryNumber: "000000000"
 					}
 				}
 			};
@@ -200,8 +203,6 @@
 		watch: {
 			$route(n, o) {
 				this.LotteryCode = this.$route.query.code;
-				console.log(this.LotteryCode);
-
 				this.setLotteryShortName(this.$route.query.name.substr(0, 2));
 			},
 			_playtype(n, o) {
@@ -287,16 +288,35 @@
 				this.initWebSocket(this.user.userName);
 			},
 			setLotterysDetall() {
-				// let last_t = this.$comFun.methods.getTimer(
-				// 	this.lotteryDetall.lastAwards.lotteryTime
+				// let new_t = this.$comFun.methods.getTimer(
+				// 	this.$comFun.methods
+				// 		.stringToDate(this.lotteryDetall.newLottery.lotteryTime)
+				// 		.getTime()
 				// );
-				let new_t = this.$comFun.methods.getTimer(
-					this.lotteryDetall.newLottery.createTime
+				let last_t = this.$comFun.methods.getTimer(
+					this.$comFun.methods
+						.stringToDate(this.lotteryDetall.lastAwards.lotteryTime)
+						.getTime()
 				);
-				this.isLastLottery = true;
-				this.isOpen = true;
-				this.DiceNum = this.lotteryDetall.newLottery.lotteryValue.split(",");
-				this.Lotterytime = new_t.mss;
+				this.newTime = this.lotteryDetall;
+				this.Lotterytime = last_t.mss;
+
+				if (last_t.mss > 1000 * 30) {
+					this.isLastLottery = true;
+				} else {
+					this.isLastLottery = false;
+					this.DiceNum = this.lotteryDetall.newLottery.lotteryValue.split(",");
+				}
+
+				if (last_t.mss < 0) {
+					this.isLastLottery = true;
+					this.Lotterytime = last_t.mss + 1000 * 60 * 20;
+				}
+
+				console.log(this.lotteryDetall.lastAwards.lotteryTime);
+				console.log(this.lotteryDetall.lastAwards.lotteryNumber);
+				// console.log(this.lotteryDetall.newLottery.lotteryTime);
+
 				// this.isLastLottery = false;
 				// this.Lotterytime = last_t.mss;
 				// console.log(this.lotteryDetall.lastAwards);
@@ -330,12 +350,14 @@
 						playTypeCode: item.code
 					};
 					params.push(param);
-					console.log(params);
 				});
+				console.log(params);
+
 				this.buyLottery(params).then(res => {
 					// console.log(res);
 					this.getInfo().then(res => {
 						if (res.code != "200") return;
+						Toast("投注成功！");
 						const user = JSON.stringify(res.user);
 						this.$comFun.cookie.setCookie("user", user);
 						this.setUser(res.user);
@@ -371,6 +393,8 @@
 				this.getPlayTypeDetailByCode({
 					code: "ks"
 				}).then(res => {
+					console.log(res);
+
 					res.data.map(item => {
 						arr.push(item.name);
 						item.playTypeList.map((item0, index) => {
@@ -535,7 +559,6 @@
 			},
 			websocketonmessage(e) {
 				//数据接收
-				// console.log(e);
 				let str = e.data;
 				// console.log(JSON.parse(str));
 

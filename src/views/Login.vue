@@ -84,9 +84,7 @@
 						this.setToken("Bearer " + res.token);
 						this.getInfo().then(res => {
 							if (res.code != "200") return;
-							const user = JSON.stringify(res.user);
-							this.$comFun.cookie.setCookie("user", user);
-							this.setUser(res.user);
+
 							this.$router.push({
 								path: "Home"
 							});
