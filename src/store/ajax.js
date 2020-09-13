@@ -31,8 +31,11 @@ instance.interceptors.response.use(
 			Toast(res.data.msg)
 			comFun.cookie.clearCookie('Admin-Token');
 			setTimeout(() => {
-				window.location.href = 'http://' + window.location.host + '/login';
-			}, 2000);
+				// window.location.href = 'http://' + window.location.host + '/login';
+				this.$router.push({
+					path: "login"
+				});
+			}, 3000);
 		} else {
 			if (res.data.user) {
 				const user = JSON.stringify(res.data.user);
