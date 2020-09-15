@@ -135,9 +135,6 @@
 				if (this.$route.name == "登录") return;
 				this.getInfo().then(res => {
 					if (res.code != "200") return;
-					const user = JSON.stringify(res.user);
-					this.$comFun.cookie.setCookie("user", user);
-					this.setUser(res.user);
 				});
 			},
 			setTabber() {
