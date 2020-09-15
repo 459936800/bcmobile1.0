@@ -68,6 +68,8 @@
 			getCaptchaImage() {
 				this.captchaImage().then(res => {
 					this.img = "data:image/gif;base64," + res.img;
+					console.log(res.img);
+
 					this.uuid = res.uuid;
 				});
 			},

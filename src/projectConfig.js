@@ -6,7 +6,7 @@ var exportsFun = {
 		// var test = 'http://wycc168.com/prod-api/',
 		// 	prod = 'http://wycc168.com/prod-api/';
 		var test = 'http://wycc168.com/prod-api/',
-			prod = 'http://10.8.1.100:82/prod-api/';
+			prod = 'http://10.8.1.100:83/prod-api/';
 		return this.isTest ? test : prod;
 	},
 	// 添加接口发布版本信息

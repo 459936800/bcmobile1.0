@@ -1,26 +1,79 @@
 <template>
 	<div class="Recharge">
-		<van-field
-			v-model="username"
-			name="用户名"
-			label="用户名"
-			placeholder="用户名"
-			:rules="[{ required: true, message: '请填写用户名' }]"
-		/>
-		<van-field
-			v-model="amount"
-			name="充值金额"
-			label="充值金额"
-			placeholder="充值金额"
-			:rules="[{ required: true, message: '请填写充值金额' }]"
-		/>
-		<van-button @click="RechargeAmount" type="danger" round block>确认充值</van-button>
+		<div v-if="isshowfield">
+			<div class="van-cell">
+				<div style="text-align: left;" class="van-cell__title">
+					<span>收款人：</span>
+					<span id="payee">老板</span>
+				</div>
+				<div style="justify-content: flex-end;" class="van-cell__value">
+					<span
+						id="payee_btn"
+						@click="copyLink('payee_btn')"
+						data-clipboard-target="#payee"
+						class="van-tag van-tag--primary"
+					>复制</span>
+				</div>
+			</div>
+			<div class="van-cell">
+				<div style="text-align: left;" class="van-cell__title">
+					<span>收款账号：</span>
+					<span id="cardnum">10086</span>
+				</div>
+				<div style="justify-content: flex-end;" class="van-cell__value">
+					<span
+						id="cardnum_btn"
+						@click="copyLink('cardnum_btn')"
+						data-clipboard-target="#cardnum"
+						class="van-tag van-tag--primary"
+					>复制</span>
+				</div>
+			</div>
+			<div class="van-cell">
+				<div style="text-align: left;" class="van-cell__title">
+					<span>开户支行：</span>
+					<span id="zhihang">邮政银行</span>
+				</div>
+				<div style="justify-content: flex-end;" class="van-cell__value">
+					<span
+						id="zhihang_btn"
+						@click="copyLink('zhihang_btn')"
+						data-clipboard-target="#zhihang"
+						class="van-tag van-tag--primary"
+					>复制</span>
+				</div>
+			</div>
+			<van-field
+				v-model="username"
+				name="用户名"
+				label="用户名"
+				placeholder="用户名"
+				:rules="[{ required: true, message: '请填写用户名' }]"
+			/>
+			<van-field
+				v-model="amount"
+				name="充值金额"
+				label="充值金额"
+				placeholder="充值金额"
+				:rules="[{ required: true, message: '请填写充值金额' }]"
+			/>
+			<van-button @click="RechargeAmount" type="danger" round block>确认充值</van-button>
+		</div>
+		<div v-else @click="isshowfield=!isshowfield">
+			<van-cell is-link>
+				<div>
+					<img src="https://imagenew.zxdsa.cn/Images/Common/wechat_mobile.png" class="img" />
+				</div>
+				<span>微信支付</span>
+			</van-cell>
+		</div>
 	</div>
 </template>
 
 <script>
 	// @ is an alias to /src
 	import { mapActions, mapGetters, mapMutations } from "vuex";
+	import { Toast } from "vant";
 
 	export default {
 		name: "Recharge",
@@ -29,7 +82,8 @@
 		data() {
 			return {
 				username: "",
-				amount: 0
+				amount: 0,
+				isshowfield: false
 			};
 		},
 		mounted() {
@@ -38,6 +92,23 @@
 		methods: {
 			...mapActions(["invest"]),
 			init() {},
+			copyLink(id) {
+				const _this = this;
+				const clipboard = new this.clipboard("#" + id);
+				clipboard.on("success", () => {
+					Toast({
+						message: "复制成功",
+						duration: 1000
+					});
+				});
+				clipboard.on("error", () => {
+					Toast({
+						message: "复制失败",
+						duration: 1000
+					});
+				});
+				console.log(clipboard);
+			},
 			RechargeAmount() {
 				let params = {
 					bankAccount: this.username,
@@ -109,7 +180,11 @@
 				font-size: 0.65em;
 			}
 		}
-
+		img {
+			width: auto;
+			height: 2.2em;
+			max-width: 2.5em;
+		}
 		.van-cell,
 		.van-cell__value {
 			display: flex;

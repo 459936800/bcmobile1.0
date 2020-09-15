@@ -5,6 +5,7 @@ import store from './store';
 import Vant from 'vant';
 import comFun from './js/common';
 import websocket from './js/websocket';
+import clipboard from 'clipboard';
 import 'vant/lib/index.css';
 
 Vue.use(Vant);
@@ -19,7 +20,7 @@ try {
 }
 
 router.beforeEach((to, from, next) => {
-	const str = '我的，';
+	const str = '我1的，L1ottery';
 	console.log(to);
 	if (str.indexOf(to.name) != -1 && !store.state.token) next({ name: '登录' });
 	else next();
@@ -28,6 +29,7 @@ router.beforeEach((to, from, next) => {
 //引入共用方法
 Vue.prototype.$comFun = comFun;
 Vue.prototype.$websocket = websocket;
+Vue.prototype.clipboard = clipboard;
 new Vue({
 	router,
 	store,
