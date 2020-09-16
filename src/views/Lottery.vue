@@ -67,12 +67,12 @@
 					<tbody>
 						<tr>
 							<td>
-								<van-field
+								<!-- <van-field
 									:disabled="bettingList.obj.length==0"
 									@input="onInputBettingNumber"
 									v-model="bettingNumber"
 									type="number"
-								/>
+								/>-->
 							</td>
 							<td>注</td>
 							<td>
@@ -96,7 +96,7 @@
 				<!---->
 				<div class="ft0">
 					<div v-if="bettingNumber!=0" @click="Refresh" class="fl">清空</div>
-					<div v-else class="fl">机选</div>
+					<!-- <div v-else class="fl">机选</div> -->
 					<p class="fl">
 						<i style="color: rgb(255, 163, 25);">{{bettingNumber}}</i>注，
 						<i style="color: rgb(255, 163, 25);">{{numFilter(number*bettingNumber*playTypeNumber,0)}}</i>元
@@ -162,7 +162,7 @@
 				newTime: "日",
 				maxRatio: 0,
 				number: 0,
-				bettingNumber: 0,
+				bettingNumber: 1,
 				playTypeNumber: 0,
 				LotteryCode: -1,
 				isDiceAnimation: false,
@@ -439,7 +439,7 @@
 					name: [],
 					price: []
 				};
-				this.bettingNumber = 0;
+				this.bettingNumber = 1;
 				this.playTypeNumber = 0;
 				this.number = 0;
 				this.maxRatio = 0;

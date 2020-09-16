@@ -1,4 +1,5 @@
 import axios from 'axios';
+import $router from '../router';
 import Vue from 'vue';
 import store from './index.js';
 import comFun from '../js/common';
@@ -27,12 +28,14 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
 	function (res) {
-		if (res.data.code != 200) {
+		if (res.data.code != 200 && $router.app._route.name != '首页') {
+			console.log(res.data.msg);
+			console.log($router.app._route.name);
 			Toast(res.data.msg)
 			comFun.cookie.clearCookie('Admin-Token');
 			setTimeout(() => {
 				// window.location.href = 'http://' + window.location.host + '/login';
-				this.$router.push({
+				$router.push({
 					path: "login"
 				});
 			}, 3000);
