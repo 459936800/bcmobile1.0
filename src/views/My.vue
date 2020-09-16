@@ -49,10 +49,6 @@
     </div>
     <van-divider />
     <div class="options">
-      <!-- <van-cell is-link v-for="i of 10" :key="i" :index="i">
-        <van-image round width="2rem" height="2rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
-        <span>投注记录{{i}}</span>
-      </van-cell>-->
       <router-link :to="{name:'投注记录'}">
         <van-cell is-link>
           <div class="defFont_userCenter m3">
@@ -73,6 +69,22 @@
         </div>
         <span>今日盈亏</span>
       </van-cell>-->
+      <router-link :to="{name:'修改密码'}">
+        <van-cell is-link>
+          <div class="defFont_userCenter m0">
+            <van-icon name="user-o" size="1rem" />
+          </div>
+          <span>修改密码</span>
+        </van-cell>
+      </router-link>
+      <router-link :to="{name:'登录'}">
+        <van-cell is-link>
+          <div class="defFont_userCenter m2">
+            <van-icon name="user-o" size="1rem" />
+          </div>
+          <span>重新登录</span>
+        </van-cell>
+      </router-link>
       <van-cell @click="logout" is-link>
         <div class="defFont_userCenter m1">
           <van-icon name="share" size="1rem" />
@@ -107,8 +119,11 @@ export default {
       console.log(this.user);
     },
     toPersonalInfo() {
+      this.$router.push({
+        path: "PersonalInfo",
+      });
       // this.$router.push({
-      //   path: "PersonalInfo",
+      //   path: "Login",
       // });
     },
     logout() {

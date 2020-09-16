@@ -46,9 +46,9 @@ const actions = {
 	// resetPhone: '/userCenter/resetPhone',
 	// // 绑定手机号码/变更绑定手机
 
-	// // PUT
-	// resetPwd: '/userCenter/resetPwd',
-	// // 修改密码
+	resetPwd({}, param, option) {
+		return ajax.$put(api.resetPwd, param, option);
+	},
 	updateInviteCode({}, param, option) {
 		return ajax.$post(api.updateInviteCode, param, option);
 	},
