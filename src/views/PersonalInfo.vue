@@ -46,9 +46,7 @@ export default {
   name: "PersonalInfo",
   components: {},
   data() {
-    return {
-      activeName: "彩票",
-    };
+    return {};
   },
   mounted() {
     this.init();

@@ -16,14 +16,14 @@ try {
 	store.commit('setUser', JSON.parse(comFun.cookie.getCookie('user')) || store.state.user);
 } catch (error) {
 	store.commit('setUser', null);
-
 }
 
 router.beforeEach((to, from, next) => {
-	const str = '我的，Lottery';
-	console.log(to);
-	if (str.indexOf(to.name) != -1 && !store.state.token) next({ name: '登录' });
-	else next();
+	// const str = '我的，Lottery';
+	// console.log(to);
+	// if (str.indexOf(to.name) != -1 && !store.state.token) next({ name: '登录' });
+	// else next()
+	next();
 });
 
 //引入共用方法
@@ -36,7 +36,7 @@ new Vue({
 	data: {
 		Bus: new Vue()
 	},
-	render: function (h) {
+	render: function(h) {
 		return h(App);
 	}
 }).$mount('#app');

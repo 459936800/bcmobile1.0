@@ -8,6 +8,10 @@ import Lottery from '../views/Lottery.vue';
 import My from '../views/My.vue';
 import PersonalInfo from '../views/PersonalInfo.vue';
 import Recharge from '../views/Recharge.vue';
+import Withdrawal from '../views/Withdrawal.vue';
+import Notice from '../views/Notice.vue';
+import CustomerService from '../views/CustomerService.vue';
+import BettingRecord from '../views/BettingRecord.vue';
 
 Vue.use(VueRouter);
 
@@ -56,6 +60,26 @@ const routes = [
 		path: '/Recharge',
 		name: '充值中心',
 		component: Recharge
+	},
+	{
+		path: '/Withdrawal',
+		name: '提现中心',
+		component: Withdrawal
+	},
+	{
+		path: '/Notice',
+		name: '消息中心',
+		component: Notice
+	},
+	{
+		path: '/CustomerService',
+		name: '客服中心',
+		component: CustomerService
+	},
+	{
+		path: '/BettingRecord',
+		name: '投注记录',
+		component: BettingRecord
 	}
 ];
 

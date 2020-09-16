@@ -25,8 +25,12 @@
           </van-col>
         </van-grid>
       </van-tab>
-      <van-tab title="体育" name="体育">暂未开放</van-tab>
-      <van-tab title="游戏" name="游戏">暂未开放</van-tab>
+      <van-tab title="体育" name="体育">
+        <van-empty description="尚未开放敬请期待！" />
+      </van-tab>
+      <van-tab title="游戏" name="游戏">
+        <van-empty description="尚未开放敬请期待！" />
+      </van-tab>
     </van-tabs>
   </div>
 </template>
