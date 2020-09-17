@@ -13,11 +13,9 @@ import Notice from '../views/Notice.vue';
 import CustomerService from '../views/CustomerService.vue';
 import BettingRecord from '../views/BettingRecord.vue';
 
-import setting from './setting';
-
 Vue.use(VueRouter);
 
-let routes = [
+const routes = [
 	{
 		path: '/',
 		name: '首页',
@@ -84,8 +82,6 @@ let routes = [
 		component: BettingRecord
 	}
 ];
-
-routes = routes.concat(setting);
 
 const router = new VueRouter({
 	mode: 'history',

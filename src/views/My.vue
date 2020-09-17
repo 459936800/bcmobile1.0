@@ -69,14 +69,6 @@
         </div>
         <span>今日盈亏</span>
       </van-cell>-->
-      <router-link :to="{name:'修改密码'}">
-        <van-cell is-link>
-          <div class="defFont_userCenter m0">
-            <van-icon name="user-o" size="1rem" />
-          </div>
-          <span>修改密码</span>
-        </van-cell>
-      </router-link>
       <router-link :to="{name:'登录'}">
         <van-cell is-link>
           <div class="defFont_userCenter m2">
@@ -119,12 +111,12 @@ export default {
       console.log(this.user);
     },
     toPersonalInfo() {
-      this.$router.push({
-        path: "PersonalInfo",
-      });
       // this.$router.push({
-      //   path: "Login",
+      //   path: "PersonalInfo",
       // });
+      this.$router.push({
+        path: "Login",
+      });
     },
     logout() {
       this.$comFun.cookie.clearCookie("Admin-Token");

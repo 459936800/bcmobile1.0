@@ -162,8 +162,8 @@
 				newTime: "日",
 				maxRatio: 0,
 				number: 0,
-				bettingNumber: 1,
-				playTypeNumber: 0,
+				bettingNumber: 0,
+				playTypeNumber: 1,
 				LotteryCode: -1,
 				isDiceAnimation: false,
 				showLottery: false,
@@ -194,12 +194,13 @@
 		mounted() {
 			this.init();
 		},
-		beforeDestory() {
-			console.log("beforeDestory");
+		destroyed() {
+			console.log("destroyed");
 			this.clearDiceAnimation();
-			Bus.$off("this_change");
+			this.websock.close();
+			this.websock = null;
+			this.$root.Bus.$off("this_change");
 		},
-
 		watch: {
 			$route(n, o) {
 				this.LotteryCode = this.$route.query.code;
@@ -270,7 +271,6 @@
 
 			init() {
 				let _this = this;
-				this.websock = null;
 				this.LotteryCode = this.$route.query.code;
 				this.$root.Bus.$on("Lottery_Refresh", () => {
 					_this.Refresh();
@@ -279,7 +279,6 @@
 				this.ThreeDiceAnimation();
 				this._getPlayTypeDetailByCode();
 				// this.setLotterysDetall();
-
 				// this._getLotterys();
 				// this._getAwardsHistory();
 			},
@@ -437,10 +436,11 @@
 				});
 				this.bettingList = {
 					name: [],
-					price: []
+					price: [],
+					obj: []
 				};
-				this.bettingNumber = 1;
-				this.playTypeNumber = 0;
+				this.bettingNumber = 0;
+				this.playTypeNumber = 1;
 				this.number = 0;
 				this.maxRatio = 0;
 			},
@@ -511,13 +511,13 @@
 			},
 			check_btn(item) {
 				if (this.$refs.check_btn[item.index].classList.length == 0) {
-					this.playTypeNumber++;
+					this.bettingNumber++;
 					this.$refs.check_btn[item.index].classList.add("checked");
 					this.bettingList.obj.push(item);
 					this.bettingList.name.push(item.name);
 					this.bettingList.price.push(item.price);
 				} else {
-					this.playTypeNumber--;
+					this.bettingNumber--;
 					this.$refs.check_btn[item.index].classList.remove("checked");
 					for (var i = 0; i < this.bettingList.obj.length; i++) {
 						if (this.bettingList.obj[i].name == item.name) {
@@ -535,16 +535,14 @@
 			},
 			initWebSocket(userId = 0) {
 				//初始化weosocket
-				let websock;
 				console.log("初始化weosocket");
 				const wsuri = "ws://10.8.1.100:8088/ws/lottery/ahks/" + userId;
 				console.log(wsuri);
-				websock = new WebSocket(wsuri);
-				websock.onmessage = this.websocketonmessage;
-				websock.onopen = this.websocketonopen;
-				websock.onerror = this.websocketonerror;
-				websock.onclose = this.websocketclose;
-				return websock;
+				this.websock = new WebSocket(wsuri);
+				this.websock.onmessage = this.websocketonmessage;
+				this.websock.onopen = this.websocketonopen;
+				this.websock.onerror = this.websocketonerror;
+				this.websock.onclose = this.websocketclose;
 			},
 			websocketonopen() {
 				//连接建立之后执行send方法发送数据
