@@ -1,13 +1,13 @@
 <template>
 	<div class="Withdrawal">
 		<van-form @submit="WithdrawalAmount">
-			<van-field
+			<!-- <van-field
 				v-model="userName"
 				name="提现人"
 				label="提现人"
 				placeholder="提现人"
 				:rules="[{ required: true, message: '请填写提现人' }]"
-			/>
+			/>-->
 			<van-field
 				v-model="bank_account"
 				name="银行卡号"
@@ -71,13 +71,13 @@
 			init() {},
 			WithdrawalAmount() {
 				let params = {
-					userId: this.userName,
 					amount: parseInt(this.amount),
-					bank_account: this.bank_account,
-					bank_name: this.bank_name,
-					bank_address: this.bank_address,
+					bankAccount: this.bank_account,
+					bankName: this.bank_name,
+					address: this.bank_address,
 					type: "银行卡"
 				};
+
 				this.withdraw(params).then(res => {
 					console.log(res);
 					Toast(res.msg);
