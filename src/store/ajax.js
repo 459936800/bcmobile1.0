@@ -32,13 +32,13 @@ instance.interceptors.response.use(
 			console.log(res.data.msg);
 			console.log($router.app._route.name);
 			Toast(res.data.msg)
-			comFun.cookie.clearCookie('Admin-Token');
-			setTimeout(() => {
-				// window.location.href = 'http://' + window.location.host + '/login';
-				$router.push({
-					path: "login"
-				});
-			}, 3000);
+			// comFun.cookie.clearCookie('Admin-Token');
+			// setTimeout(() => {
+			// 	// window.location.href = 'http://' + window.location.host + '/login';
+			// 	$router.push({
+			// 		path: "login"
+			// 	});
+			// }, 3000);
 		} else {
 			if (res.data.user) {
 				const user = JSON.stringify(res.data.user);
