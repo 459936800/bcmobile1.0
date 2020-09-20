@@ -278,6 +278,9 @@
 	.m3 {
 		background: linear-gradient(180deg, #d78dff, #af83ff);
 	}
+	.m4 {
+		background: linear-gradient(180deg, rgb(253, 201, 99), rgb(253, 168, 32));
+	}
 
 	.van-nav-bar {
 		background-color: #e53333 !important;

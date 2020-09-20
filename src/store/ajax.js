@@ -14,7 +14,7 @@ var instance = axios.create({
 instance.interceptors.request.use(
 	function (config) {
 		console.log('api:' + config.url);
-		const str = '/login,/captchaImage';
+		const str = '/login,/captchaImage,/addUser';
 		if (str.indexOf(config.url) == -1) {
 			const token = 'Bearer ' + comFun.cookie.getCookie('Admin-Token');
 			token && (config.headers.Authorization = token);

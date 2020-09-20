@@ -13,6 +13,9 @@ const api = {
 	// POST
 	addUser: '/home/addUser',
 	// 用户注册
+	// POST
+	addUser1: '/system/user',
+	// 用户注册
 
 	// GET
 	getActivityList: '/home/getActivityList',
