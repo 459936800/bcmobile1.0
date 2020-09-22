@@ -1,11 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-// // const isProd = process.env.NODE_ENV === 'production' ? true : false;
-// const isProd = true;
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const isProd = process.env.NODE_ENV === 'production' ? true : false;
 // const MxBuildPlugin = require('./build.js');
-// const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-// const sourceMapEnabled = true;
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const sourceMapEnabled = true;
+
+console.log(process.env.VUE_APP_NODE_TYPE);
+console.log(process.env.NODE_ENV);
 
 function resolve(dir) {
 	return path.join(__dirname, dir);
@@ -36,36 +38,36 @@ module.exports = {
 			}
 		}
 	},
-	// configureWebpack: (config) => {
-	// 	let plugins = [];
-	// 	if (!isProd) {
-	// 		plugins.push(
-	// 			new UglifyJsPlugin({
-	// 				uglifyOptions: {
-	// 					warnings: false,
-	// 					compress: {
-	// 						drop_console: true,
-	// 						drop_debugger: false,
-	// 						pure_funcs: ['console.log'] //移除console
-	// 					}
-	// 				},
-	// 				sourceMap: false,
-	// 				parallel: true
-	// 			})
-	// 		);
-	// 		// plugins.push(
-	// 		//   new CompressionWebpackPlugin({
-	// 		//     filename: '[path].gz[query]',
-	// 		//     algorithm: 'gzip',
-	// 		//     test: productionGzipExtensions,
-	// 		//     threshold: 10240,
-	// 		//     minRatio: 0.8,
-	// 		//   }),
-	// 		// );
-	// 		// plugins.push(new MxBuildPlugin());
-	// 	}
-	// 	config.plugins = [...config.plugins, ...plugins, new LodashModuleReplacementPlugin()];
-	// },
+	configureWebpack: (config) => {
+		let plugins = [];
+		if (!isProd) {
+			plugins.push(
+				new UglifyJsPlugin({
+					uglifyOptions: {
+						warnings: false,
+						compress: {
+							drop_console: true,
+							drop_debugger: false,
+							pure_funcs: [ 'console.log' ] //移除console
+						}
+					},
+					sourceMap: false,
+					parallel: true
+				})
+			);
+			// plugins.push(
+			//   new CompressionWebpackPlugin({
+			//     filename: '[path].gz[query]',
+			//     algorithm: 'gzip',
+			//     test: productionGzipExtensions,
+			//     threshold: 10240,
+			//     minRatio: 0.8,
+			//   }),
+			// );
+			// plugins.push(new MxBuildPlugin());
+		}
+		config.plugins = [ ...config.plugins, ...plugins, new LodashModuleReplacementPlugin() ];
+	},
 	chainWebpack: (config) => {
 		config.plugin('provide').use(webpack.ProvidePlugin, [
 			{

@@ -5,14 +5,14 @@ var exportsFun = {
 	get baseUrl() {
 		// var test = 'http://wycc168.com/prod-api/',
 		// 	prod = 'http://wycc168.com/prod-api/';
-		var test = 'http://wycc168.com/prod-api/',
-			prod = 'http://10.8.1.100:83/prod-api/';
+		var test = 'http://10.8.1.100:83/prod-api/',
+			prod = 'http://wycc168.com/prod-api/';
 		return this.isTest ? test : prod;
 	},
 	// 添加接口发布版本信息
 	get proVersion() {
-		var test = '20200228';
-		var prod = '20200228';
+		var test = '20200922';
+		var prod = '20200922';
 		return this.isTest ? test : prod;
 	},
 	get appVersion() {
@@ -22,6 +22,9 @@ var exportsFun = {
 	},
 	// 是否是测试环境
 	get isTest() {
+		console.log('环境');
+		console.log(process.env.NODE_ENV);
+		console.log(process.env.VUE_APP_NODE_TYPE);
 		return process.env.VUE_APP_NODE_TYPE === '0';
 	},
 
