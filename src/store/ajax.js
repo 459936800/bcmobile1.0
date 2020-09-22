@@ -31,7 +31,7 @@ instance.interceptors.response.use(
 		if (res.data.code != 200 && $router.app._route.name != '首页') {
 			console.log(res.data.msg);
 			console.log($router.app._route.name);
-			Toast(res.data.msg)
+			// Toast(res.data.msg)
 			// comFun.cookie.clearCookie('Admin-Token');
 			// setTimeout(() => {
 			// 	// window.location.href = 'http://' + window.location.host + '/login';

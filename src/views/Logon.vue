@@ -2,20 +2,34 @@
 	<div class="Logon">
 		<van-form @submit="onSubmit">
 			<van-field
+				v-model="invite"
+				name="邀请码"
+				label="邀请码"
+				placeholder="邀请码"
+				:rules="[{ required: true, message: '请填写邀请码' }]"
+			/>
+			<van-field
 				v-model="userName"
 				name="用户名"
 				label="用户名"
 				placeholder="用户名"
 				:rules="[{ required: true, message: '请填写用户名' }]"
 			/>
-
 			<van-field
 				v-model="password"
 				type="password"
-				name="密码"
-				label="密码"
-				placeholder="密码"
-				:rules="[{ required: true, message: '请填写密码' }]"
+				name="登录密码"
+				label="登录密码"
+				placeholder="登录密码"
+				:rules="[{ required: true, message: '请填写登录密码' }]"
+			/>
+			<van-field
+				v-model="fundPassword"
+				type="password"
+				name="资金密码"
+				label="资金密码"
+				placeholder="资金密码"
+				:rules="[{ required: true, message: '请填写资金密码' }]"
 			/>
 			<van-field
 				v-model="nickName"
@@ -55,8 +69,11 @@
 		components: {},
 		data() {
 			return {
+				avatar: "u1.png",
 				userName: "",
 				password: "",
+				fundPassword: "",
+				invite: "",
 				nickName: "",
 				email: "",
 				phonenumber: "",
@@ -76,16 +93,17 @@
 			},
 			onSubmit() {
 				let params = {
+					avatar: this.avatar,
 					userName: this.userName,
 					nickName: this.nickName,
 					password: this.password,
+					fundPassword: this.fundPassword,
+					invite: this.invite,
 					email: this.email,
-					sex: 0,
+					sex: "1",
 					phonenumber: this.phonenumber
 				};
-
 				this.addUser(params).then(res => {
-					console.log(res);
 					if (res.code == "200") {
 						Toast("注册成功");
 					} else {
