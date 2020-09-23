@@ -357,7 +357,6 @@ export default {
       this.buyLottery(params).then((res) => {
         if (res.code != "200") return;
         Toast("投注成功！");
-
         // console.log(res);
         this.getInfo().then((res) => {
           if (res.code != "200") return;

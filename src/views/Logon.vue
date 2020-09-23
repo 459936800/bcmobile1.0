@@ -1,13 +1,13 @@
 <template>
   <div class="Logon">
     <van-form @submit="onSubmit">
-      <!-- <van-field @click="show=!show" name="头像" label="头像">
+      <van-field @click="show=!show" name="头像" label="头像">
         <template #input>
           <div class="img_div">
-            <van-image round width="4rem" height="4rem" :src="require('../assets/image/u2.jpeg')" />
+            <van-image round width="4rem" height="4rem" :src="require('../assets/image/'+avatar)" />
           </div>
         </template>
-      </van-field>-->
+      </van-field>
       <van-field
         v-model="invite"
         name="邀请码"
@@ -72,9 +72,18 @@
         <van-button type="danger" round block native-type="submit">免费注册</van-button>
       </div>
     </van-form>
-    <van-dialog v-model="show" title="头像选择" show-cancel-button>
-      <van-row class="title">title</van-row>
-      <van-row class="content">content</van-row>
+    <van-dialog v-model="show" title="头像选择">
+      <van-row class="content">
+        <van-col v-for="(item,index) of images" :span="6" :key="index" :index="index">
+          <van-image
+            @click="avatar=images[index]"
+            round
+            width="4rem"
+            height="4rem"
+            :src="require('../assets/image/'+item)"
+          />
+        </van-col>
+      </van-row>
     </van-dialog>
   </div>
 </template>
@@ -101,6 +110,7 @@ export default {
       userName: "",
       code: "",
       uuid: "更多  ",
+      images: ["u1.png", "u2.jpeg", "u3.jpeg"],
     };
   },
   mounted() {
@@ -127,6 +137,11 @@ export default {
       this.addUser(params).then((res) => {
         if (res.code == "200") {
           Toast("注册成功");
+          setTimeout(() => {
+            $router.push({
+              path: "/Login",
+            });
+          }, 3000);
         } else {
           Toast(res.msg);
         }
@@ -142,6 +157,9 @@ export default {
     display: flex;
     // justify-content: center;
     align-items: center;
+  }
+  .content {
+    padding: 1em;
   }
 }
 </style>

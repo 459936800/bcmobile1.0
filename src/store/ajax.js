@@ -33,12 +33,12 @@ instance.interceptors.response.use(
 			console.log($router.app._route.name);
 			if (res.data.msg.indexOf('/error') != -1 || res.data.msg.indexOf('/getInfo') != -1) {
 				Toast('登录已失效请重新登录');
+				comFun.cookie.clearCookie('Admin-Token');
+				store.commit('setUser', null);
+				comFun.cookie.clearCookie('user');
+				store.commit('setToken', null);
 				setTimeout(() => {
-					comFun.cookie.clearCookie('Admin-Token');
-					comFun.cookie.clearCookie('user');
-					$router.push({
-						path: '/'
-					});
+					window.location.href = 'http://' + window.location.host;
 				}, 3000);
 			} else {
 				Toast(res.data.msg);
