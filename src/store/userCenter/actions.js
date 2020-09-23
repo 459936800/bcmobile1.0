@@ -54,6 +54,9 @@ const actions = {
 	},
 	withdraw({}, param, option) {
 		return ajax.$post(api.withdraw, param, option);
+	},
+	getLiRun({}, param, option) {
+		return ajax.$post(api.getLiRun, param, option);
 	}
 };
 

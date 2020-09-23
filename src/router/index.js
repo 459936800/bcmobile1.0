@@ -12,6 +12,7 @@ import Withdrawal from '../views/Withdrawal.vue';
 import Notice from '../views/Notice.vue';
 import CustomerService from '../views/CustomerService.vue';
 import BettingRecord from '../views/BettingRecord.vue';
+import Profit from '../views/Profit.vue';
 
 Vue.use(VueRouter);
 
@@ -80,6 +81,11 @@ const routes = [
 		path: '/BettingRecord',
 		name: '投注记录',
 		component: BettingRecord
+	},
+	{
+		path: '/Profit',
+		name: '今日盈亏',
+		component: Profit
 	}
 ];
 

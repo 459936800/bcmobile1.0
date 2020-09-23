@@ -60,7 +60,11 @@ const api = {
 	// 修改邀请码下的返点配置
 
 	// POST
-	withdraw: '/userCenter/withdraw'
+	withdraw: '/userCenter/withdraw',
 	// 用户提现
+
+	// POST
+	getLiRun: '/userCenter/getLiRun'
+	// 获取利润
 };
 export default api;

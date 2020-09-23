@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const isProd = process.env.NODE_ENV === 'production' ? true : false;
 // const MxBuildPlugin = require('./build.js');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
@@ -41,20 +41,20 @@ module.exports = {
 	configureWebpack: (config) => {
 		let plugins = [];
 		if (!isProd) {
-			plugins.push(
-				new UglifyJsPlugin({
-					uglifyOptions: {
-						warnings: false,
-						compress: {
-							drop_console: true,
-							drop_debugger: false,
-							pure_funcs: [ 'console.log' ] //移除console
-						}
-					},
-					sourceMap: false,
-					parallel: true
-				})
-			);
+			// plugins.push(
+			// 	new UglifyJsPlugin({
+			// 		uglifyOptions: {
+			// 			warnings: false,
+			// 			compress: {
+			// 				drop_console: true,
+			// 				drop_debugger: false,
+			// 				pure_funcs: [ 'console.log' ] //移除console
+			// 			}
+			// 		},
+			// 		sourceMap: false,
+			// 		parallel: true
+			// 	})
+			// );
 			// plugins.push(
 			//   new CompressionWebpackPlugin({
 			//     filename: '[path].gz[query]',

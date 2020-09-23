@@ -7,6 +7,16 @@ var exportsFun = {
 		// 	prod = 'http://wycc168.com/prod-api/';
 		var test = 'http://10.8.1.100:83/prod-api/',
 			prod = 'http://wycc168.com/prod-api/';
+		console.log('接口头');
+		console.log(this.isTest ? test : prod);
+
+		return this.isTest ? test : prod;
+	},
+	get wsUrl() {
+		// var test = 'http://wycc168.com/prod-api/',
+		// 	prod = 'http://wycc168.com/prod-api/';
+		var test = 'ws://10.8.1.100:8088/',
+			prod = 'ws://wycc168.com/prod-api/';
 		return this.isTest ? test : prod;
 	},
 	// 添加接口发布版本信息
@@ -22,9 +32,6 @@ var exportsFun = {
 	},
 	// 是否是测试环境
 	get isTest() {
-		console.log('环境');
-		console.log(process.env.NODE_ENV);
-		console.log(process.env.VUE_APP_NODE_TYPE);
 		return process.env.VUE_APP_NODE_TYPE === '0';
 	},
 
