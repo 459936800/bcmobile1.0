@@ -2,33 +2,24 @@
   <div class="Profit">
     {{data1}}
     <van-row>
-      <h3>会员您好！这是您今日的盈利总额！</h3>
+      <div class="top_content">
+        <div>
+          <div>个人盈亏（元）</div>
+          <div>1000</div>
+        </div>
+      </div>
     </van-row>
     <van-row>
-      <van-col :span="12">
-        <div class="active">
-          <van-icon name="gem-o" />
-          <div>
-            <div class="title">盈利总额（元）</div>
-            <div class="value">1000</div>
-          </div>
-        </div>
-      </van-col>
-      <van-col :span="12">
-        <div class="active">
-          <div>
-            <div class="title">盈亏计算公式</div>
-            <div class="value">盈利=中奖-投注+返点</div>
-          </div>
-        </div>
-      </van-col>
+      <div class="active tip">
+        <van-icon name="info-o" />
+        <div>盈亏计算公式:盈利=中奖-投注+返点</div>
+      </div>
     </van-row>
     <van-row>
       <van-col :span="8">
         <div class="active">
           <div>
-            <van-icon name="gem-o" />
-            <div class="title">投注</div>
+            <div class="title">投注金额（元）</div>
             <div class="value0">0</div>
           </div>
         </div>
@@ -36,8 +27,7 @@
       <van-col :span="8">
         <div class="active">
           <div>
-            <van-icon name="gem-o" />
-            <div class="title">中奖</div>
+            <div class="title">中奖金额（元）</div>
             <div class="value0">0</div>
           </div>
         </div>
@@ -45,8 +35,7 @@
       <van-col :span="8">
         <div class="active">
           <div>
-            <van-icon name="gem-o" />
-            <div class="title">充值</div>
+            <div class="title">充值金额（元）</div>
             <div class="value0">0</div>
           </div>
         </div>
@@ -54,8 +43,7 @@
       <van-col :span="8">
         <div class="active">
           <div>
-            <van-icon name="gem-o" />
-            <div class="title">返点</div>
+            <div class="title">返点金额（元）</div>
             <div class="value0">0</div>
           </div>
         </div>
@@ -111,25 +99,40 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 5%;
+    padding: 10px 10px;
     .title {
-      text-align: left;
-      font-size: 0.72em;
+      text-align: center;
+      padding: 5px;
+      font-size: 0.82em;
       color: #616161;
     }
     .value {
       text-align: left;
-      font-size: 0.68em;
-      color: #ff2929;
+      padding: 5px;
+      font-size: 0.65em;
+      color: #fff;
     }
     .value0 {
-      font-size: 0.68em;
+      font-size: 0.78em;
       color: #ff2929;
     }
   }
-
-  .fr {
-    float: right;
+  .tip {
+    height: 2.6em;
+    background: linear-gradient(95deg, #f79112, #ec5639);
+    font-size: 0.8em;
+    line-height: 2.7em;
+    color: #fff;
+    position: relative;
+  }
+  .top_content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 7em;
+    width: 100%;
+    background: linear-gradient(135deg, #e63028, #ec5639);
+    color: #fff;
   }
   .van-dialog__content {
     padding: 1em;
