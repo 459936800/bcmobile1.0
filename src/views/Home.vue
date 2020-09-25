@@ -1,11 +1,18 @@
 <template>
   <div class="Home">
     <!-- 轮播 -->
-    <van-swipe class="my-swipe" :autoplay="4000" indicator-color="white">
-      <van-swipe-item>1</van-swipe-item>
-      <van-swipe-item>2</van-swipe-item>
-      <van-swipe-item>3</van-swipe-item>
-      <van-swipe-item>4</van-swipe-item>
+    <van-swipe
+      v-if="BannerList.length > 0"
+      class="my-swipe"
+      :autoplay="4000"
+      indicator-color="white"
+    >
+      <van-swipe-item v-for="src in BannerList" :key="src.id">
+        <img :src="require('../assets/image/' + src.url)" alt="轮播图"
+      /></van-swipe-item>
+    </van-swipe>
+    <van-swipe v-else class="my-swipe" :autoplay="4000" indicator-color="white">
+      <img :src="require('../assets/image/indexPic1.png')" alt="轮播图" />
     </van-swipe>
     <!-- 公告 -->
     <van-notice-bar
@@ -17,44 +24,44 @@
     />
     <!-- 菜单 -->
     <div class="scrollStyle">
-      <router-link :to="{name:'充值中心'}">
+      <router-link :to="{ name: '充值中心' }">
         <div>
           <div class="defFont m0">
             <van-icon name="bill" size="1.5rem" />
           </div>
-          <div style="width:4.8rem">充值</div>
+          <div style="width: 4.8rem">充值</div>
         </div>
       </router-link>
-      <router-link :to="{name:'提现中心'}">
+      <router-link :to="{ name: '提现中心' }">
         <div>
           <div class="defFont m1">
             <van-icon name="gold-coin" size="1.5rem" />
           </div>
-          <div style="width:4.8rem">提现</div>
+          <div style="width: 4.8rem">提现</div>
         </div>
       </router-link>
-      <router-link :to="{name:'客服中心'}">
+      <router-link :to="{ name: '客服中心' }">
         <div>
           <div class="defFont m2">
             <van-icon name="service" size="1.5rem" />
           </div>
-          <div style="width:4.8rem">客服</div>
+          <div style="width: 4.8rem">客服</div>
         </div>
       </router-link>
-      <router-link :to="{name:'消息中心'}">
+      <router-link :to="{ name: '消息中心' }">
         <div>
           <div class="defFont m3">
             <van-icon name="volume" size="1.5rem" />
           </div>
-          <div style="width:4.8rem">通知</div>
+          <div style="width: 4.8rem">通知</div>
         </div>
       </router-link>
-      <router-link :to="{name:'我的'}">
+      <router-link :to="{ name: '我的' }">
         <div>
           <div class="defFont m0">
             <van-icon name="manager" size="1.5rem" />
           </div>
-          <div style="width:4.8rem">我的</div>
+          <div style="width: 4.8rem">我的</div>
         </div>
       </router-link>
     </div>
@@ -73,9 +80,14 @@
         span="8"
         @click="toLottery(item)"
       >
-        <van-image round width="2.5rem" height="2.5rem" :src="require('../assets/image/k3.png')" />
-        <p>{{item.name}}</p>
-        <p>{{item.tip}}</p>
+        <van-image
+          round
+          width="2.5rem"
+          height="2.5rem"
+          :src="require('../assets/image/k3.png')"
+        />
+        <p>{{ item.name }}</p>
+        <p>{{ item.tip }}</p>
       </van-col>
     </van-grid>
   </div>
@@ -94,6 +106,7 @@ export default {
       title: "登录",
       leftText: "彩票",
       rightText: "更多  ",
+      BannerList: [],
       LotterysList: [
         {
           id: 0,
@@ -132,12 +145,16 @@ export default {
       "getActivityDetail",
       "getAdvert",
       "getHotLottery",
+      "getBanner",
     ]),
     init() {
       // this._getLotterys();
       // this._getActivityDetail();
       // this._getHotLottery();
+      this._getBanner();
+      this._getAdvert();
     },
+
     toLottery(item) {
       this.$router.push({
         path: "Lottery",
@@ -163,6 +180,7 @@ export default {
     _getBanner() {
       this.getBanner().then((res) => {
         console.log(res);
+        this.BannerList = res.data;
       });
     },
     _getHotLottery() {
@@ -200,11 +218,14 @@ export default {
 <style lang="less">
 .Home {
   .my-swipe .van-swipe-item {
-    color: #fff;
-    font-size: 20px;
-    line-height: 150px;
-    text-align: center;
-    background-color: #39a9ed;
+    // color: #fff;
+    // font-size: 20px;
+    // line-height: 150px;
+    // text-align: center;
+    // background-color: #39a9ed;
+    img {
+      width: 100%;
+    }
   }
   .scrollStyle {
     overflow-y: hidden;
@@ -217,9 +238,6 @@ export default {
     a {
       color: #000;
     }
-    // img {
-    //   width: 10rem !important;
-    // }
   }
   .scrollStyle::-webkit-scrollbar {
     display: none;

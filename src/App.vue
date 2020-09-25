@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <header class="top" :style="'width:'+screenWidth+'px'" @click="showVconsole">
+    <!-- <header class="top" :style="'width:'+screenWidth+'px'" @click="showVconsole"> -->
+    <header class="top">
       <!-- <van-nav-bar
         v-if="!showTabbar&&this.$route.name!='Lottery'"
         :title="this.$route.name"
@@ -11,21 +12,24 @@
         @click-right="onClickRight"
       />-->
       <!-- Lottery -->
-      <span class="modeDropdown" v-if="this.$route.name=='Lottery'">
+      <span class="modeDropdown" v-if="this.$route.name == 'Lottery'">
         <div class="van-nav-bar__left">
-          <i @click="onback" class="van-icon van-icon-arrow-left van-nav-bar__arrow">
+          <i
+            @click="onback"
+            class="van-icon van-icon-arrow-left van-nav-bar__arrow"
+          >
             <!---->
           </i>
         </div>
         <p>玩法</p>
         <span @click="showPicker = true">
-          {{playTypeTitle}}
+          {{ playTypeTitle }}
           <van-icon v-if="showPicker" name="arrow-up" />
           <van-icon v-else name="arrow-down" />
         </span>
         <!-- 彩票切换 -->
         <div @click="showLottery = !showLottery" class="van-nav-bar__right">
-          {{LotteryShortName}}
+          {{ LotteryShortName }}
           <van-icon v-if="showLottery" name="arrow-up" />
           <van-icon v-else name="arrow-down" />
         </div>
@@ -49,10 +53,11 @@
             <!---->
           </i>
         </div>
-        {{this.$route.name}}
+        {{ this.$route.name }}
       </span>
     </header>
-    <div class="main" :style="'height:'+screeHeight+'px;width:'+screenWidth+'px'">
+    <!-- <div class="main" :style="'height:'+screeHeight+'px;width:'+screenWidth+'px'"> -->
+    <div class="main">
       <transition>
         <router-view />
       </transition>
@@ -69,7 +74,12 @@
       <van-tabbar-item name="Caigou" icon="gold-coin-o">彩购</van-tabbar-item>
       <van-tabbar-item name="My" icon="contact">我的</van-tabbar-item>
     </van-tabbar>
-    <van-dialog @click="show=!show" v-model="show" title="公告" show-cancel-button>
+    <van-dialog
+      @click="show = !show"
+      v-model="show"
+      title="公告"
+      show-cancel-button
+    >
       <van-swipe class="my-swipe" :autoplay="4000" indicator-color="#e53333">
         <van-swipe-item>1</van-swipe-item>
         <van-swipe-item>2</van-swipe-item>
@@ -140,8 +150,8 @@ export default {
       this.$root.Bus.$emit("Lottery_Refresh");
     },
     init() {
-      let vconsole = require("./js/vconsole.min");
-      vconsole = new vconsole();
+      // let vconsole = require("./js/vconsole.min");
+      // vconsole = new vconsole();
       this.playTypeTitle = this.playTypeColumns[0];
       this.setTabber();
       if (this.$route.name == "登录") return;
@@ -211,6 +221,9 @@ export default {
 </script>
 <style  lang="less">
 #app {
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -227,8 +240,8 @@ export default {
     position: fixed;
     top: 0;
     width: 100%;
-    height: 3em;
-    line-height: 3em;
+    height: 2.7em;
+    line-height: 2.7em;
     background: #e53333;
     color: #fff;
     z-index: 1;
@@ -260,7 +273,7 @@ export default {
   }
   .main {
     width: 100%;
-    margin-top: 2.95em;
+    margin-top: 2.65em;
     padding-bottom: 3.2em;
   }
   .my-swipe .van-swipe-item {
@@ -305,7 +318,7 @@ export default {
 }
 .v-enter-active,
 .v-leave-active {
-  transition: all 100.35s ease;
+  transition: all 0.35s ease;
 }
 .defFont {
   margin: auto;

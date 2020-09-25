@@ -64,7 +64,11 @@ const api = {
 	// 用户提现
 
 	// POST
-	getLiRun: '/userCenter/getLiRun'
+	getLiRun: '/userCenter/getLiRun',
 	// 获取利润
+
+	// POST
+	upload: '/userCenter/upload'
+	// 上传文件
 };
 export default api;

@@ -1,10 +1,15 @@
 <template>
   <div class="Logon">
     <van-form @submit="onSubmit">
-      <van-field @click="show=!show" name="头像" label="头像">
+      <van-field @click="show = !show" name="头像" label="头像">
         <template #input>
           <div class="img_div">
-            <van-image round width="4rem" height="4rem" :src="require('../assets/image/'+avatar)" />
+            <van-image
+              round
+              width="4rem"
+              height="4rem"
+              :src="'http://wycc168.com/prod-api' + avatar"
+            />
           </div>
         </template>
       </van-field>
@@ -68,20 +73,30 @@
         placeholder="手机号码"
         :rules="[{ required: true, message: '请填写手机号码' }]"
       />
-      <div style="margin: 16px;">
-        <van-button type="danger" round block native-type="submit">免费注册</van-button>
+      <div style="margin: 16px">
+        <van-button type="danger" round block native-type="submit"
+          >免费注册</van-button
+        >
       </div>
     </van-form>
     <van-dialog v-model="show" title="头像选择">
       <van-row class="content">
-        <van-col v-for="(item,index) of images" :span="6" :key="index" :index="index">
+        <van-col
+          v-for="(item, index) of images"
+          :span="6"
+          :key="index"
+          :index="index"
+        >
           <van-image
-            @click="avatar=images[index]"
+            @click="avatar = images[index]"
             round
             width="4rem"
             height="4rem"
-            :src="require('../assets/image/'+item)"
+            :src="'http://wycc168.com/prod-api' + item"
           />
+        </van-col>
+        <van-col :span="6">
+          <van-uploader :after-read="afterRead" :max-count="1" />
         </van-col>
       </van-row>
     </van-dialog>
@@ -99,7 +114,8 @@ export default {
   data() {
     return {
       show: false,
-      avatar: "u1.png",
+      fileList: [],
+      avatar: "/profile/upload/2020/09/25/039912c3f13ce661e8fe102496167251.gif",
       email: "",
       fundPassword: "",
       invite: "",
@@ -110,17 +126,29 @@ export default {
       userName: "",
       code: "",
       uuid: "更多  ",
-      images: ["u1.png", "u2.jpeg", "u3.jpeg"],
+      images: [],
     };
   },
   mounted() {
     this.init();
   },
   methods: {
-    ...mapActions(["addUser", "addUser1"]),
+    ...mapActions(["addUser", "upload"]),
     ...mapMutations(["setToken", "setUser"]),
     init() {
       // this.getCaptchaImage();
+    },
+    afterRead(file) {
+      // 此时可以自行将文件上传至服务器
+      const formData = new FormData(); // 声明一个FormData对象
+      formData.append("file", file.file, file.file.name);
+      this.upload(formData).then((res) => {
+        console.log(res);
+        if (res.code == 200) {
+          this.images.push(res.imgUrl);
+        } else {
+        }
+      });
     },
     onSubmit() {
       let params = {

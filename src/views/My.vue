@@ -3,13 +3,13 @@
     <div class="topInfo"></div>
     <div class="topCard">
       <div @click="toPersonalInfo" class="cardTop">
-        <a style="width:5em">
+        <a style="width: 5em">
           <van-image
             v-if="user.avatar"
             round
             width="4rem"
             height="4rem"
-            :src="require('../assets/image/'+user.avatar)"
+            :src="require('../assets/image/' + user.avatar)"
           />
           <van-image
             v-else
@@ -20,73 +20,73 @@
           />
         </a>
         <div class="useInof">
-          <div>{{user.nickName}}</div>
-          <div>余额：{{user.amount}}</div>
+          <div>{{ user.nickName }}</div>
+          <div>余额：{{ user.amount }}</div>
         </div>
         <van-icon name="arrow" />
       </div>
     </div>
     <div class="cardBottom">
       <div>
-        <router-link :to="{name:'充值中心'}">
+        <router-link :to="{ name: '充值中心' }">
           <div class="defFont m0">
             <van-icon name="bill" size="1.5rem" />
           </div>
-          <div style="width:3rem">充值</div>
+          <div style="width: 3rem">充值</div>
         </router-link>
       </div>
       <div>
-        <router-link :to="{name:'提现中心'}">
+        <router-link :to="{ name: '提现中心' }">
           <div class="defFont m1">
             <van-icon name="gold-coin" size="1.5rem" />
           </div>
-          <div style="width:3rem">提现</div>
+          <div style="width: 3rem">提现</div>
         </router-link>
       </div>
       <div>
-        <router-link :to="{name:'客服中心'}">
+        <router-link :to="{ name: '客服中心' }">
           <div class="defFont m2">
             <van-icon name="service" size="1.5rem" />
           </div>
-          <div style="width:3rem">客服</div>
+          <div style="width: 3rem">客服</div>
         </router-link>
       </div>
-      <router-link :to="{name:'消息中心'}">
+      <router-link :to="{ name: '消息中心' }">
         <div>
           <div class="defFont m3">
             <van-icon name="volume" size="1.5rem" />
           </div>
-          <div style="width:3rem">通知</div>
+          <div style="width: 3rem">通知</div>
         </div>
       </router-link>
     </div>
     <van-divider />
     <div class="options">
-      <router-link :to="{name:'投注记录'}">
+      <router-link :to="{ name: '投注记录' }">
         <van-cell is-link>
-          <div class="defFont_userCenter m3">
+          <div class="defFont_userCenter m0">
             <van-icon name="balance-list" size="1rem" />
           </div>
           <span>投注记录</span>
         </van-cell>
       </router-link>
-      <router-link :to="{name:'银行卡绑定'}">
+      <!-- <router-link :to="{name:'银行卡绑定'}">
         <van-cell is-link>
           <div class="defFont_userCenter m4">
             <van-icon name="credit-pay" size="1rem" />
           </div>
           <span>银行卡绑定</span>
         </van-cell>
-      </router-link>
-      <router-link :to="{name:'今日盈亏'}">
+      </router-link> -->
+      <router-link :to="{ name: '今日盈亏' }">
         <van-cell is-link>
-          <div class="defFont_userCenter m0">
+          <div class="defFont_userCenter m4">
             <van-icon name="eye" size="1rem" />
           </div>
           <span>今日盈亏</span>
         </van-cell>
       </router-link>
-      <router-link :to="{name:'登录'}">
+      <router-link :to="{ name: '登录' }">
         <van-cell is-link>
           <div class="defFont_userCenter m2">
             <van-icon name="user-o" size="1rem" />

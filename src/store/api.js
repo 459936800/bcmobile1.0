@@ -42,7 +42,11 @@ const api = {
 	// 获取最新中奖榜单
 
 	// GET
-	getYesterdayWinner: '/home/getYesterdayWinner'
+	getYesterdayWinner: '/home/getYesterdayWinner',
 	// 获取昨日高手榜
+
+	// GET
+	getBankCardList: '/home/getBankCardList'
+	// 获取商家银行卡
 };
 export default api;

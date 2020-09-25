@@ -1,11 +1,10 @@
 <template>
   <div class="Profit">
-    {{data1}}
     <van-row>
       <div class="top_content">
         <div>
           <div>个人盈亏（元）</div>
-          <div>1000</div>
+          <div>{{ data1.total }}</div>
         </div>
       </div>
     </van-row>
@@ -20,7 +19,7 @@
         <div class="active">
           <div>
             <div class="title">投注金额（元）</div>
-            <div class="value0">0</div>
+            <div class="value0">{{ data1.buy }}</div>
           </div>
         </div>
       </van-col>
@@ -28,7 +27,7 @@
         <div class="active">
           <div>
             <div class="title">中奖金额（元）</div>
-            <div class="value0">0</div>
+            <div class="value0">{{ data1.win }}</div>
           </div>
         </div>
       </van-col>
@@ -36,7 +35,7 @@
         <div class="active">
           <div>
             <div class="title">充值金额（元）</div>
-            <div class="value0">0</div>
+            <div class="value0">{{ data1.invest }}</div>
           </div>
         </div>
       </van-col>
@@ -44,7 +43,7 @@
         <div class="active">
           <div>
             <div class="title">返点金额（元）</div>
-            <div class="value0">0</div>
+            <div class="value0">{{ data1.profit }}</div>
           </div>
         </div>
       </van-col>
@@ -87,7 +86,7 @@ export default {
       this.getLiRun(params).then((res) => {
         console.log(res);
         // Toast(res.msg);
-        this._data = res;
+        this.data1 = res.data;
       });
     },
   },

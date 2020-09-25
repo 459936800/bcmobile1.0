@@ -12,27 +12,27 @@
           <van-col span="8">
             <van-row>
               <div class="balance">
-                <span>余额：{{user.amount}}</span>
+                <span>余额：{{ user.amount }}</span>
               </div>
             </van-row>
           </van-col>
         </van-row>
-        <van-row class="LotteryNumber" style="padding-top:1em">
+        <van-row class="LotteryNumber" style="padding-top: 1em">
           <van-col span="12">
             <!-- v-if="isLastLottery" -->
-            <span>第{{lotteryDetall.lastAwards.lotteryNumber}}</span>
+            <span>第{{ lotteryDetall.lastAwards.lotteryNumber }}</span>
             <!-- <span v-else>第{{lotteryDetall.newLottery.lotteryNumber}}</span> -->
             <van-count-down :time="Lotterytime" />
           </van-col>
           <van-col span="12">
             <!-- v-if="isLastLottery" -->
-            <span>{{lotteryDetall.lastAwards.lotteryNumber}}期开奖号码</span>
+            <span>{{ lotteryDetall.lastAwards.lotteryNumber }}期开奖号码</span>
             <!-- <span v-else>{{lotteryDetall.newLottery.lotteryNumber}}期开奖号码</span> -->
             <div>
               <div v-show="!isLastLottery">
-                <i :class="'Dice Dice'+DiceNum[0]"></i>
-                <i :class="'Dice Dice'+DiceNum[1]"></i>
-                <i :class="'Dice Dice'+DiceNum[2]"></i>
+                <i :class="'Dice Dice' + DiceNum[0]"></i>
+                <i :class="'Dice Dice' + DiceNum[1]"></i>
+                <i :class="'Dice Dice' + DiceNum[2]"></i>
               </div>
               <div v-show="isLastLottery">
                 <i ref="rDice1" :class="'Dice rDice1'"></i>
@@ -45,8 +45,8 @@
       </div>
       <div v-if="playTypeArr[playTypeNum]" class="Lottery-content">
         <!-- <button @click="ThreeDiceAnimation">ThreeDiceAnimation</button> -->
-        <van-row :class="'Method Method'+classNum">
-          <p class="MethodMsg">{{playTypeArr[playTypeNum].remark}}</p>
+        <van-row :class="'Method Method' + classNum">
+          <p class="MethodMsg">{{ playTypeArr[playTypeNum].remark }}</p>
           <ul>
             <li
               ref="check_btn"
@@ -56,8 +56,8 @@
               :index="item.index"
               class
             >
-              {{item.name}}
-              <p>赔{{item.price}}</p>
+              {{ item.name }}
+              <p>赔{{ item.price }}</p>
             </li>
           </ul>
         </van-row>
@@ -77,17 +77,18 @@
               <td>注</td>
               <td>
                 <van-field
-                  :disabled="bettingList.obj.length==0"
+                  :disabled="bettingList.obj.length == 0"
                   @input="onInputBetting"
                   v-model="number"
                   type="number"
                 />
               </td>
               <td>元</td>
-              <td style="width: 1em;text-align: left;">
+              <td style="width: 1em; text-align: left">
                 <div>
                   最高可中
-                  <span>{{numFilter(number*maxRatio,0)}}</span>元
+                  <span>{{ numFilter(number * maxRatio, 0) }}</span
+                  >元
                 </div>
               </td>
             </tr>
@@ -95,13 +96,15 @@
         </table>
         <!---->
         <div class="ft0">
-          <div v-if="bettingNumber!=0" @click="Refresh" class="fl">清空</div>
+          <div v-if="bettingNumber != 0" @click="Refresh" class="fl">清空</div>
           <!-- <div v-else class="fl">机选</div> -->
           <p class="fl">
-            <i style="color: rgb(255, 163, 25);">{{bettingNumber}}</i>注，
-            <i
-              style="color: rgb(255, 163, 25);"
-            >{{numFilter(number*bettingNumber*playTypeNumber,0)}}</i>元
+            <i style="color: rgb(255, 163, 25)">{{ bettingNumber }}</i
+            >注，
+            <i style="color: rgb(255, 163, 25)">{{
+              numFilter(number * bettingNumber * playTypeNumber, 0)
+            }}</i
+            >元
           </p>
           <div @click="_buyLottery" class="f0">确认投注</div>
         </div>
@@ -111,8 +114,15 @@
       <van-row class="moreLottery0">
         <p style="margin-bottom: 10px">快3</p>
         <van-row class="moreLottery1">
-          <van-col span="8" @click="goToLottery(item)" v-for="item of LotterysList" :key="item.id">
-            <span :class="{'active':LotteryCode==item.code}">{{item.name}}</span>
+          <van-col
+            span="8"
+            @click="goToLottery(item)"
+            v-for="item of LotterysList"
+            :key="item.id"
+          >
+            <span :class="{ active: LotteryCode == item.code }">{{
+              item.name
+            }}</span>
           </van-col>
         </van-row>
       </van-row>
@@ -583,7 +593,7 @@ export default {
 .Lottery {
   .topLottery {
     width: 100%;
-    top: 3em;
+    top: 2.7em;
     position: fixed;
     z-index: 0;
     .LotteryNumber {
