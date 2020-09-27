@@ -45,9 +45,9 @@ let methods = {
 	back(router) {
 		router.go(-1);
 	},
-	getTimer(Time) {
+	getTimer(Time, sysTime) {
 		let timer = 0;
-		let today = new Date();
+		let today = new Date(sysTime);
 		let day = new Date(Time);
 		let mss = day - today;
 		function addZero(num) {

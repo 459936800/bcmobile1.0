@@ -345,6 +345,9 @@ export default {
         let last_t = this.$comFun.methods.getTimer(
           this.$comFun.methods
             .stringToDate(this.lotteryDetall.lastAwards.lotteryTime)
+            .getTime(),
+          this.$comFun.methods
+            .stringToDate(this.lotteryDetall.systemTime)
             .getTime()
         );
         this.newTime = this.lotteryDetall;
@@ -676,7 +679,6 @@ export default {
     },
     websocketonmessage(e) {
       //数据接收
-      console.log(e.data);
       let str = e.data;
       console.log(JSON.parse(str));
       if (str.length > 2) {
