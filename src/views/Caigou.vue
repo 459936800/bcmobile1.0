@@ -2,28 +2,34 @@
   <div class="Caigou">
     <van-tabs sticky v-model="activeName">
       <van-tab title="彩票" name="彩票">
-        <div class="title">
-          <van-icon name="fire-o" />
-          <span>幸运快3</span>
+        <div
+          v-for="Lotterys of AllLotterys"
+          :key="Lotterys.id"
+          :index="Lotterys.id"
+        >
+          <div class="title">
+            <van-icon name="fire-o" />
+            <span>{{ Lotterys.title }}</span>
+          </div>
+          <van-grid :column-num="3">
+            <van-col
+              v-for="item of Lotterys.list"
+              :key="item.id"
+              :index="item.id"
+              span="8"
+              @click="toLottery(item)"
+            >
+              <van-image
+                round
+                width="2.5rem"
+                height="2.5rem"
+                :src="require('../assets/image/k3.png')"
+              />
+              <p>{{ item.name }}</p>
+              <p>{{ item.tip }}</p>
+            </van-col>
+          </van-grid>
         </div>
-        <van-grid :column-num="3">
-          <van-col
-            v-for="item of LotterysList"
-            :key="item.id"
-            :index="item.id"
-            span="8"
-            @click="toLottery(item)"
-          >
-            <van-image
-              round
-              width="2.5rem"
-              height="2.5rem"
-              :src="require('../assets/image/k3.png')"
-            />
-            <p>{{item.name}}</p>
-            <p>{{item.tip}}</p>
-          </van-col>
-        </van-grid>
       </van-tab>
       <van-tab title="体育" name="体育">
         <van-empty description="尚未开放敬请期待！" />
@@ -45,27 +51,36 @@ export default {
   data() {
     return {
       activeName: "彩票",
-      LotterysList: [
+      AllLotterys: [
         {
           id: 0,
-          code: "xyks",
-          name: "幸运快3",
-          pic: 0,
-          tip: "15分钟1期",
-        },
-        {
-          id: 1,
-          code: "gdks",
-          name: "广东快3",
-          pic: 0,
-          tip: "15分钟1期",
-        },
-        {
-          id: 2,
-          code: "njks",
-          name: "南京快3",
-          pic: 0,
-          tip: "15分钟1期",
+          title: "幸运快三",
+          list: [
+            {
+              id: 0,
+              type: "ks",
+              code: "xyks",
+              name: "幸运快3",
+              pic: 0,
+              tip: "15分钟1期",
+            },
+            {
+              id: 1,
+              type: "ks",
+              code: "gdks",
+              name: "广东快3",
+              pic: 0,
+              tip: "15分钟1期",
+            },
+            {
+              id: 2,
+              type: "ks",
+              code: "njks",
+              name: "南京快3",
+              pic: 0,
+              tip: "15分钟1期",
+            },
+          ],
         },
       ],
     };
@@ -75,20 +90,38 @@ export default {
   },
   methods: {
     ...mapActions(["getLotterys"]),
-    init() {},
+    init() {
+      this.AllLotterys = [];
+      this._getLotterys();
+    },
     toLottery(item) {
       this.$router.push({
         path: "Lottery",
-        query: { code: item.code, name: item.name },
+        query: { type: item.type, code: item.code, name: item.name },
       });
     },
     _getLotterys() {
-      let params = {
-        type: "",
-      };
-      this.getLotterys(params).then((res) => {
-        this.LotterysList = res.rows;
-      });
+      let typeArr = [
+        { tltle: "快三", type: "ks" },
+        { tltle: "时时彩", type: "ssc" },
+        { tltle: "pk10", type: "pks" },
+        { tltle: "11选5", type: "syxw" },
+      ];
+      let i = this.AllLotterys.length;
+      if (i != typeArr.length) {
+        let params = {
+          type: typeArr[i].type,
+        };
+        this.getLotterys(params).then((res) => {
+          // console.log(res.rows);
+          let obj = {};
+          obj.id = i;
+          obj.title = typeArr[i].tltle;
+          obj.list = res.rows;
+          this.AllLotterys.push(obj);
+          this._getLotterys();
+        });
+      }
     },
   },
 };
@@ -103,7 +136,7 @@ export default {
     }
   }
   .van-sticky--fixed {
-    top: 3.03em;
+    top: 2.7em;
   }
 }
 </style>

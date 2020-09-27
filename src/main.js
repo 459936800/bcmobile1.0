@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
 	const str = '我的，Lottery，个人资料，充值中心，提现中心，消息中心，投注记录';
 	console.log(to);
 	if (str.indexOf(to.name) != -1 && !store.state.token) next({ name: '登录' });
-	else next()
+	else next();
 	// next();
 });
 
@@ -36,7 +36,7 @@ new Vue({
 	data: {
 		Bus: new Vue()
 	},
-	render: function (h) {
+	render: function(h) {
 		return h(App);
 	}
 }).$mount('#app');

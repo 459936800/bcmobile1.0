@@ -53,7 +53,9 @@
             <!---->
           </i>
         </div>
-        {{ this.$route.name }}
+        <span @click="showVconsole">
+          {{ this.$route.name }}
+        </span>
       </span>
     </header>
     <!-- <div class="main" :style="'height:'+screeHeight+'px;width:'+screenWidth+'px'"> -->
@@ -211,7 +213,7 @@ export default {
         let vconsole = require("./js/vconsole.min");
         vconsole = new vconsole();
         // }
-      } else if (this.$router.app._route.name == "我的") {
+      } else if (this.$router.app._route.name == "首页") {
         console.log(this.vconsoleCounter);
         this.vconsoleCounter--;
       }
@@ -291,19 +293,6 @@ export default {
     }
   }
 }
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.55s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(-100%);
-  // 解决页面从上往下位移问题
-  text-align: center;
-  position: absolute;
-}
 
 .v-enter {
   // position: absolute;
@@ -346,6 +335,16 @@ export default {
 }
 .m4 {
   background: linear-gradient(180deg, rgb(253, 201, 99), rgb(253, 168, 32));
+}
+
+.overlay-content {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  h3 {
+    color: #fff;
+  }
 }
 
 .van-nav-bar {

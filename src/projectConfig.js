@@ -12,6 +12,11 @@ var exportsFun = {
 
 		return this.isTest ? test : prod;
 	},
+	get imgUrl() {
+		var test = 'http://10.8.1.100:83/prod-api',
+			prod = 'http://wycc168.com/prod-api';
+		return this.isTest ? test : prod;
+	},
 	get wsUrl() {
 		// var test = 'http://wycc168.com/prod-api/',
 		// 	prod = 'http://wycc168.com/prod-api/';

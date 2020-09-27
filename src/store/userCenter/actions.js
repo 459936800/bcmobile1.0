@@ -71,7 +71,7 @@ const actions = {
 					// var rate = (_this.uploadRate = e.loaded / e.total); //已上传的比例
 					// console.log('进度：' + (rate * 100).toFixed(0) + '%');
 					console.log(e.loaded / e.total);
-					console.log(e);
+					// console.log(e);
 					// if (rate < 100) {
 					//   //这里的进度只能表明文件已经上传到后台，但是后台有没有处理完还不知道
 					//   //因此不能直接显示为100%，不然用户会误以为已经上传完毕，关掉浏览器的话就可能导致上传失败

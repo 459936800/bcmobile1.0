@@ -1,10 +1,10 @@
 <template>
   <div class="Lottery">
-    <div v-if="!showLottery">
+    <div v-show="!showLottery">
       <div class="topLottery">
         <van-row>
           <van-col span="16">
-            <van-tabs v-model="isActive">
+            <van-tabs v-model="isActive" @click="goToBettingRecord">
               <van-tab title="我要投注"></van-tab>
               <van-tab title="最近投注"></van-tab>
             </van-tabs>
@@ -21,13 +21,17 @@
           <van-col span="12">
             <!-- v-if="isLastLottery" -->
             <span>第{{ lotteryDetall.lastAwards.lotteryNumber }}</span>
-            <!-- <span v-else>第{{lotteryDetall.newLottery.lotteryNumber}}</span> -->
+            <!-- <span>第{{ lotteryDetall.newLottery.lotteryNumber }}</span> -->
             <van-count-down :time="Lotterytime" />
           </van-col>
           <van-col span="12">
             <!-- v-if="isLastLottery" -->
-            <span>{{ lotteryDetall.lastAwards.lotteryNumber }}期开奖号码</span>
-            <!-- <span v-else>{{lotteryDetall.newLottery.lotteryNumber}}期开奖号码</span> -->
+            <span v-if="isLastLottery"
+              >{{ lotteryDetall.lastAwards.lotteryNumber }}期开奖号码</span
+            >
+            <span v-else
+              >{{ lotteryDetall.newLottery.lotteryNumber }}期开奖号码</span
+            >
             <div>
               <div v-show="!isLastLottery">
                 <i :class="'Dice Dice' + DiceNum[0]"></i>
@@ -43,6 +47,7 @@
           </van-col>
         </van-row>
       </div>
+      <!-- 玩法 s-->
       <div v-if="playTypeArr[playTypeNum]" class="Lottery-content">
         <!-- <button @click="ThreeDiceAnimation">ThreeDiceAnimation</button> -->
         <van-row :class="'Method Method' + classNum">
@@ -62,6 +67,7 @@
           </ul>
         </van-row>
       </div>
+      <!-- 玩法 e-->
       <footer class="bottom">
         <table>
           <tbody>
@@ -110,14 +116,20 @@
         </div>
       </footer>
     </div>
-    <div v-else>
-      <van-row class="moreLottery0">
-        <p style="margin-bottom: 10px">快3</p>
+    <!-- 选择其他彩票种类 -->
+    <div v-show="showLottery">
+      <van-row
+        v-for="Lotterys of AllLotterys"
+        :key="Lotterys.id"
+        :index="Lotterys.id"
+        class="moreLottery0"
+      >
+        <p style="margin-bottom: 10px">{{ Lotterys.title }}</p>
         <van-row class="moreLottery1">
           <van-col
             span="8"
             @click="goToLottery(item)"
-            v-for="item of LotterysList"
+            v-for="item of Lotterys.list"
             :key="item.id"
           >
             <span :class="{ active: LotteryCode == item.code }">{{
@@ -127,6 +139,14 @@
         </van-row>
       </van-row>
     </div>
+    <van-overlay :show="overlayShow">
+      <div class="overlay-content">
+        <div>
+          <van-loading type="spinner" />
+          <h3>正在投注,请稍后...</h3>
+        </div>
+      </div>
+    </van-overlay>
   </div>
 </template>
 
@@ -140,43 +160,54 @@ export default {
   data() {
     return {
       websock: null,
+      overlayShow: false,
       isActive: 0,
-      LotterysList: [
+      AllLotterys: [
         {
           id: 0,
-          code: "xyks",
-          name: "幸运快3",
-          pic: 0,
-          tip: "15分钟1期",
-        },
-        {
-          id: 1,
-          code: "gdks",
-          name: "广东快3",
-          pic: 0,
-          tip: "15分钟1期",
-        },
-        {
-          id: 2,
-          code: "njks",
-          name: "南京快3",
-          pic: 0,
-          tip: "15分钟1期",
+          title: "幸运快三",
+          list: [
+            {
+              id: 0,
+              type: "ks",
+              code: "xyks",
+              name: "幸运快3",
+              pic: 0,
+              tip: "15分钟1期",
+            },
+            {
+              id: 1,
+              type: "ks",
+              code: "gdks",
+              name: "广东快3",
+              pic: 0,
+              tip: "15分钟1期",
+            },
+            {
+              id: 2,
+              type: "ks",
+              code: "njks",
+              name: "南京快3",
+              pic: 0,
+              tip: "15分钟1期",
+            },
+          ],
         },
       ],
       bettingList: {
         name: [],
         price: [],
         obj: [],
-      },
+      }, //玩法数组
       SumBettingList: [],
-      Lotterytime: 0,
+      Lotterytime: -1,
       newTime: "日",
       maxRatio: 0,
       number: 0,
       bettingNumber: 0,
       playTypeNumber: 1,
       LotteryCode: -1,
+      LotteryType: "",
       isDiceAnimation: false,
       showLottery: false,
       LotteryShortName: "",
@@ -224,6 +255,9 @@ export default {
     _showLottery(n, o) {
       this.showLottery = this._showLottery;
     },
+    Lotterytime(n, o) {
+      // console.log(n);
+    },
   },
   computed: {
     ...mapGetters({
@@ -262,6 +296,7 @@ export default {
           break;
       }
     },
+
     classNum() {
       if (this.playTypeArr[this.playTypeNum].name.indexOf("通选") != -1)
         return 1;
@@ -283,7 +318,9 @@ export default {
 
     init() {
       let _this = this;
+      this.AllLotterys = [];
       this.LotteryCode = this.$route.query.code;
+      this.LotteryType = this.$route.query.type;
       this.$root.Bus.$on("Lottery_Refresh", () => {
         _this.Refresh();
       });
@@ -291,7 +328,7 @@ export default {
       this.ThreeDiceAnimation();
       this._getPlayTypeDetailByCode();
       // this.setLotterysDetall();
-      // this._getLotterys();
+      this._getLotterys();
       // this._getAwardsHistory();
     },
     getNewLotterys() {
@@ -299,52 +336,97 @@ export default {
       this.initWebSocket(this.user.userName);
     },
     setLotterysDetall() {
-      // let new_t = this.$comFun.methods.getTimer(
-      // 	this.$comFun.methods
-      // 		.stringToDate(this.lotteryDetall.newLottery.lotteryTime)
-      // 		.getTime()
-      // );
-      let last_t = this.$comFun.methods.getTimer(
-        this.$comFun.methods
-          .stringToDate(this.lotteryDetall.lastAwards.lotteryTime)
-          .getTime()
-      );
-      this.newTime = this.lotteryDetall;
-      this.Lotterytime = last_t.mss;
+      try {
+        // let new_t = this.$comFun.methods.getTimer(
+        //   this.$comFun.methods
+        //     .stringToDate(this.lotteryDetall.newLottery.lotteryTime)
+        //     .getTime()
+        // );
+        let last_t = this.$comFun.methods.getTimer(
+          this.$comFun.methods
+            .stringToDate(this.lotteryDetall.lastAwards.lotteryTime)
+            .getTime()
+        );
+        this.newTime = this.lotteryDetall;
+        // 计算如果最新数据还没,前端续一分钟
+        if (last_t.mss <= 0 && this.Lotterytime <= 0) {
+          this.isLastLottery = true;
+          this.Lotterytime = 1000 * 61;
+        } else if (this.Lotterytime <= 0) {
+          this.Lotterytime = last_t.mss;
+        }
+        // 30秒后开始要骰子
+        if (this.Lotterytime > 1000 * 30) {
+          this.isLastLottery = false;
+          this.DiceNum = this.lotteryDetall.newLottery.lotteryValue.split(",");
+        } else {
+          this.isLastLottery = true;
+        }
 
-      if (last_t.mss > 1000 * 30) {
-        this.isLastLottery = true;
-      } else {
-        this.isLastLottery = false;
-        this.DiceNum = this.lotteryDetall.newLottery.lotteryValue.split(",");
+        this.Lotterytime = this.Lotterytime - 1000;
+
+        console.log(this.Lotterytime);
+        console.log(this.lotteryDetall.lastAwards.lotteryTime);
+        console.log(this.lotteryDetall.lastAwards.lotteryNumber);
+        // console.log(this.lotteryDetall.newLottery.lotteryTime);
+
+        // this.isLastLottery = false;
+        // this.Lotterytime = last_t.mss;
+        // console.log(this.lotteryDetall.lastAwards);
+        // console.log(last_t.timer);
+        // console.log(this.lotteryDetall.newLottery.lotteryNumber);
+      } catch (error) {
+        console.error(error);
+        this.websock.close();
       }
-
-      if (last_t.mss < 0) {
-        this.isLastLottery = true;
-        this.Lotterytime = last_t.mss + 1000 * 60 * 20;
-      }
-
-      console.log(this.lotteryDetall.lastAwards.lotteryTime);
-      console.log(this.lotteryDetall.lastAwards.lotteryNumber);
-      // console.log(this.lotteryDetall.newLottery.lotteryTime);
-
-      // this.isLastLottery = false;
-      // this.Lotterytime = last_t.mss;
-      // console.log(this.lotteryDetall.lastAwards);
-      // console.log(last_t.timer);
-      // console.log(this.lotteryDetall.newLottery.lotteryNumber);
     },
     goToLottery(item) {
       this.LotteryCode = item.code;
+      this.LotteryType = item.type;
       this.LotteryShortName = item.name.substr(0, 2);
       this.$router.push({
         path: "Lottery",
-        query: { code: item.code, name: item.name },
+        query: { type: item.type, code: item.code, name: item.name },
+      });
+      location.reload();
+    },
+    goToBettingRecord(e) {
+      if (e != 1) return;
+      this.$router.push({
+        path: "BettingRecord",
       });
     },
-
+    PlayTypeFilter() {
+      let obj = {
+        state: false,
+        msg: "不通过",
+      };
+      switch (this._playtype) {
+        case "三不同号":
+          if (this.bettingNumber >= 3) {
+            obj.state = true;
+            obj.msg = "通过";
+          } else {
+            obj.msg = "该玩法需要选至少3个号码。";
+          }
+          break;
+        default:
+          obj.state = true;
+          obj.msg = "通过";
+          break;
+      }
+      return obj;
+    },
     _buyLottery() {
+      this.overlayShow = true;
       let params = [];
+      let Filter = this.PlayTypeFilter();
+      if (Filter.state) {
+      } else {
+        Toast(Filter.msg);
+        this.overlayShow = false;
+        return;
+      }
       this.bettingList.obj.map((item) => {
         let now = new Date().toJSON();
         console.log(now);
@@ -363,18 +445,23 @@ export default {
         params.push(param);
       });
       console.log(params);
-
-      this.buyLottery(params).then((res) => {
-        if (res.code != "200") return;
-        Toast("投注成功！");
-        // console.log(res);
-        this.getInfo().then((res) => {
+      if (params.length > 0 && this.number > 0) {
+        this.buyLottery(params).then((res) => {
+          this.overlayShow = false;
           if (res.code != "200") return;
-          const user = JSON.stringify(res.user);
-          this.$comFun.cookie.setCookie("user", user);
-          this.setUser(res.user);
+          Toast("投注成功！");
+          // console.log(res);
+          this.getInfo().then((res) => {
+            if (res.code != "200") return;
+            const user = JSON.stringify(res.user);
+            this.$comFun.cookie.setCookie("user", user);
+            this.setUser(res.user);
+          });
         });
-      });
+      } else {
+        Toast("请选择玩法和输入金额再确认投注！");
+        this.overlayShow = false;
+      }
     },
     // _addBetting() {
     // 	let now = new Date().toJSON();
@@ -403,7 +490,7 @@ export default {
       let arr = [];
       this.playTypeArr = [];
       this.getPlayTypeDetailByCode({
-        code: "ks",
+        code: this.LotteryType,
       }).then((res) => {
         console.log(res);
 
@@ -417,14 +504,29 @@ export default {
         this.setPlayTypeColumns(arr);
       });
     },
-    // _getLotterys() {
-    //   let params = {
-    //     type: "",
-    //   };
-    //   this.getLotterys(params).then((res) => {
-    //     console.log(res);
-    //   });
-    // },
+    _getLotterys() {
+      let typeArr = [
+        { tltle: "快三", type: "ks" },
+        { tltle: "时时彩", type: "ssc" },
+        { tltle: "pk10", type: "pks" },
+        { tltle: "11选5", type: "syxw" },
+      ];
+      let i = this.AllLotterys.length;
+      if (i != typeArr.length) {
+        let params = {
+          type: typeArr[i].type,
+        };
+        this.getLotterys(params).then((res) => {
+          // console.log(res.rows);
+          let obj = {};
+          obj.id = i;
+          obj.title = typeArr[i].tltle;
+          obj.list = res.rows;
+          this.AllLotterys.push(obj);
+          this._getLotterys();
+        });
+      }
+    },
     // _getLast5Awards() {
     //   let params = {
     //     code: "ahks",
@@ -461,6 +563,7 @@ export default {
       return b - a;
     },
     onInputBetting(value) {
+      this.bettingList.obj.length == 0 ? (this.number = 0) : null;
       if (this.bettingList.name.length != 0) {
         this.maxRatio = this.bettingList.price.sort(this.downsort)[0];
       }
@@ -549,8 +652,10 @@ export default {
     initWebSocket(userId = 0) {
       //初始化weosocket
       // code jzks  ahks
+
       console.log("初始化weosocket");
-      const wsuri = $conf.wsUrl + "ws/lottery/ahks/" + userId;
+      const wsuri =
+        $conf.wsUrl + "ws/lottery/" + this.$route.query.code + "/" + userId;
       console.log(wsuri);
       this.websock = new WebSocket(wsuri);
       this.websock.onmessage = this.websocketonmessage;
@@ -567,10 +672,11 @@ export default {
     websocketonerror() {
       console.log("onError");
       //连接建立失败重连
-      this.initWebSocket();
+      // this.initWebSocket();
     },
     websocketonmessage(e) {
       //数据接收
+      console.log(e.data);
       let str = e.data;
       console.log(JSON.parse(str));
       if (str.length > 2) {
@@ -759,6 +865,12 @@ export default {
   .van-tabs__wrap,
   .balance {
     height: 2em !important;
+    span {
+      font: 10px sans-serif;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
   .van-tabs__content {
     width: 150%;

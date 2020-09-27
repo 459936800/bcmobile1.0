@@ -2,18 +2,25 @@
   <div class="Home">
     <!-- 轮播 -->
     <van-swipe
-      v-if="BannerList.length > 0"
+      v-show="BannerList.length > 0"
       class="my-swipe"
       :autoplay="4000"
       indicator-color="white"
     >
       <van-swipe-item v-for="src in BannerList" :key="src.id">
-        <img :src="require('../assets/image/' + src.url)" alt="轮播图"
+        <img :src="imgUrl + src.url" alt="轮播图"
       /></van-swipe-item>
     </van-swipe>
-    <van-swipe v-else class="my-swipe" :autoplay="4000" indicator-color="white">
+    <van-swipe
+      v-show="!BannerList.length > 0"
+      class="my-swipe"
+      :autoplay="4000"
+      indicator-color="white"
+    >
+      <img :src="require('../assets/image/indexPic1.png')" alt="轮播图" />
       <img :src="require('../assets/image/indexPic1.png')" alt="轮播图" />
     </van-swipe>
+
     <!-- 公告 -->
     <van-notice-bar
       scrollable
@@ -90,10 +97,14 @@
         <p>{{ item.tip }}</p>
       </van-col>
     </van-grid>
+    <!-- 上传图片 -->
+    <van-uploader :after-read="afterRead" :max-count="1" />
+    <img :src="imgUrl + images" alt="" />
   </div>
 </template>
 
 <script>
+import { Toast } from "vant";
 // @ is an alias to /src
 
 import { mapActions, mapGetters, mapMutations } from "vuex";
@@ -103,6 +114,8 @@ export default {
   data() {
     return {
       Notice: "欢迎来到500",
+      imgUrl: $conf.imgUrl,
+      images: "",
       title: "登录",
       leftText: "彩票",
       rightText: "更多  ",
@@ -110,13 +123,15 @@ export default {
       LotterysList: [
         {
           id: 0,
-          code: "xyks",
-          name: "幸运快3",
+          type: "ks",
+          code: "ahks",
+          name: "安徽快3",
           pic: 0,
           tip: "15分钟1期",
         },
         {
           id: 1,
+          type: "ks",
           code: "gdks",
           name: "广东快3",
           pic: 0,
@@ -124,6 +139,7 @@ export default {
         },
         {
           id: 2,
+          type: "ks",
           code: "njks",
           name: "南京快3",
           pic: 0,
@@ -146,19 +162,61 @@ export default {
       "getAdvert",
       "getHotLottery",
       "getBanner",
+      "upload",
     ]),
+    setLotteryDetall(item) {
+      switch (item.code) {
+        case "ssc":
+          item.tip = "1分钟1期";
+          item.pic = "ssc.png";
+          break;
+        case "pk10":
+          item.tip = "15分钟1期";
+          item.pic = "pk10.png";
+          break;
+        case "k3":
+          item.tip = "3分钟1期";
+          item.pic = "k3.png";
+          break;
+        case "6hc":
+          item.tip = "15分钟1期";
+          item.pic = "6hc.png";
+          break;
+        case "11x5":
+          item.tip = "15分钟1期";
+          item.pic = "11x5.png";
+          break;
+        default:
+          item.tip = "3分钟1期";
+          item.pic = "k3.png";
+          break;
+      }
+      return item;
+    },
     init() {
-      // this._getLotterys();
+      this._getLotterys();
       // this._getActivityDetail();
       // this._getHotLottery();
       this._getBanner();
       this._getAdvert();
     },
-
+    afterRead(file) {
+      // 此时可以自行将文件上传至服务器
+      const formData = new FormData(); // 声明一个FormData对象
+      formData.append("file", file.file, file.file.name);
+      this.upload(formData).then((res) => {
+        console.log(res);
+        if (res.code == 200) {
+          Toast(res.msg);
+          this.images = res.imgUrl;
+        } else {
+        }
+      });
+    },
     toLottery(item) {
       this.$router.push({
         path: "Lottery",
-        query: { code: item.code, name: item.name },
+        query: { type: item.type, code: item.code, name: item.name },
       });
     },
     _getActivityDetail() {
@@ -194,20 +252,7 @@ export default {
       };
       this.getLotterys(params).then((res) => {
         res.rows.map((item) => {
-          item.pic = "k3.png";
-          item.tip = "1分钟1期";
-
-          if (item.code.indexOf("ssc") != -1) item.tip = "1分钟1期";
-          if (item.code.indexOf("pk10") != -1) item.tip = "15分钟1期";
-          if (item.code.indexOf("k3") != -1) item.tip = "3分钟1期";
-          if (item.code.indexOf("6hc") != -1) item.tip = "15分钟1期";
-          if (item.code.indexOf("11x5") != -1) item.tip = "15分钟1期";
-
-          if (item.code.indexOf("ssc") != -1) item.pic = "ssc.png";
-          if (item.code.indexOf("pk10") != -1) item.pic = "pk10.png";
-          if (item.code.indexOf("k3") != -1) item.pic = "k3.png";
-          if (item.code.indexOf("6hc") != -1) item.pic = "6hc.png";
-          if (item.code.indexOf("11x5") != -1) item.pic = "11x5.png";
+          item = this.setLotteryDetall(item);
         });
         this.LotterysList = res.rows;
       });

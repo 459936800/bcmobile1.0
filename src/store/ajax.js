@@ -14,16 +14,25 @@ var instance = axios.create({
 instance.interceptors.request.use(
 	function(config) {
 		console.log('api:' + config.url);
-		let noTokenArr = [
-			'/login',
-			'/captchaImage',
-			'/home/addUser',
-			'/home/getBanner',
-			'/home/getAdvert',
-			'/home/getBankCardList'
-		];
-		const str = noTokenArr.join(',');
-		if (str.indexOf(config.url) == -1) {
+
+		// let noTokenArr = [
+		// 	'/login',
+		// 	'/captchaImage',
+		// 	'/home/addUser',
+		// 	'/home/getBanner',
+		// 	'/home/getAdvert',
+		// 	'/lottery/getLotterys',
+		// 	'/lottery/getPlayTypeDetailByCode',
+		// 	'/home/getBankCardList'
+		// ];
+		// const str = noTokenArr.join(',');
+		// if (str.indexOf(config.url) == -1 && comFun.cookie.getCookie('Admin-Token')) {
+		// 	console.log('settoken');
+		// const token = 'Bearer ' + comFun.cookie.getCookie('Admin-Token');
+		// 	token && (config.headers.Authorization = token);
+		// }
+		if (comFun.cookie.getCookie('Admin-Token')) {
+			// console.log('settoken');
 			const token = 'Bearer ' + comFun.cookie.getCookie('Admin-Token');
 			token && (config.headers.Authorization = token);
 		}
@@ -68,6 +77,10 @@ instance.interceptors.response.use(
 		if (error.response) {
 			// 请求已发送，服务器回复状态码在2xx之外
 			console.error(error.response);
+			Toast('服务器出错5秒后自动刷新页面。');
+			setTimeout(() => {
+				location.reload();
+			}, 5000);
 		} else if (error.request) {
 			// 请求已发送，但没有收到回应
 			console.error(error.request);
