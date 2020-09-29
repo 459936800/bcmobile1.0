@@ -146,7 +146,7 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions(["getInfo"]),
+    ...mapActions(["getInfo", "refreshUserInfo"]),
     ...mapMutations(["setPlaytype", "setUser", "setShowLottery"]),
     callLotteryRefresh() {
       this.$root.Bus.$emit("Lottery_Refresh");
@@ -157,11 +157,12 @@ export default {
       this.playTypeTitle = this.playTypeColumns[0];
       this.setTabber();
       if (this.$route.name == "登录") return;
-      this.getInfo().then((res) => {
+      this.refreshUserInfo().then((res) => {
+        console.log(res);
         if (res.code != "200") return;
-        const user = JSON.stringify(res.user);
+        const user = res.data;
         this.$comFun.cookie.setCookie("user", user);
-        this.setUser(res.user);
+        this.setUser(res.data);
       });
     },
     setTabber() {

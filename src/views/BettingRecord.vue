@@ -126,7 +126,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getBettingRecord"]),
+    ...mapActions(["getBettingRecord", "getBettingRecordList"]),
     init() {
       this.page = 1;
       this.RecordsList = [];
@@ -192,7 +192,6 @@ export default {
       this.getBettingRecord(params).then((res) => {
         // console.log(res);
         // Toast(res.msg);
-
         if (res.data && res.data.length > 0) {
           this.RecordsList = this.RecordsList.concat(res.data);
           this.page++;

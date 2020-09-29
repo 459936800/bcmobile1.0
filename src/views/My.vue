@@ -126,14 +126,13 @@ export default {
   },
   methods: {
     ...mapMutations(["setToken", "setUser"]),
-    ...mapActions(["getInfo"]),
+    ...mapActions(["getInfo", "refreshUserInfo"]),
     init() {
-      this.getInfo().then((res) => {
+      this.refreshUserInfo().then((res) => {
         if (res.code != "200") return;
-        const user = JSON.stringify(res.user);
+        const user = res.data;
         this.$comFun.cookie.setCookie("user", user);
-        this.setUser(res.user);
-        console.log(this.user);
+        this.setUser(res.data);
       });
     },
     toPersonalInfo() {
@@ -145,7 +144,7 @@ export default {
       });
     },
     logout() {
-      this.$comFun.cookie.clearCookie("Admin-Token");
+      this.$comFun.cookie.clearCookie("Admin-Tokens");
       this.$comFun.cookie.clearCookie("user");
       this.setToken(null);
       this.setUser(null);

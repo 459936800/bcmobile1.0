@@ -10,10 +10,8 @@ const actions = {
 	getBettingRecord({}, param, option) {
 		return ajax.$post(api.getBettingRecord, param, option);
 	},
-	getBettingRecordList({}, param) {
-		return ajax.$get(api.getBettingRecordList, {
-			params: param
-		});
+	getBettingRecordList({}, param, option) {
+		return ajax.$post(api.getBettingRecordList, param, option);
 	},
 	getFundRecordByNextLevel({}, param, option) {
 		return ajax.$post(api.getFundRecordByNextLevel, param, option);
@@ -83,6 +81,9 @@ const actions = {
 			}
 		};
 		return ajax.$post(api.upload, param, config);
+	},
+	refreshUserInfo({}, param, option) {
+		return ajax.$post(api.refreshUserInfo, param, option);
 	}
 };
 

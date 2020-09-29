@@ -46,12 +46,14 @@
           >
         </div>
       </div>
+
       <van-field
-        v-model="username"
-        name="用户名"
-        label="用户名"
-        placeholder="用户名"
-        :rules="[{ required: true, message: '请填写用户名' }]"
+        v-model="bankAccount"
+        type="number"
+        name="银行卡号"
+        label="银行卡号"
+        placeholder="银行卡号"
+        :rules="[{ required: true, message: '银行卡号' }]"
       />
       <van-field
         v-model="amount"
@@ -88,10 +90,12 @@ import { Toast } from "vant";
 export default {
   name: "Recharge",
   components: {},
-  computed: {},
+  computed: {
+    ...mapGetters({ user: "getUser" }),
+  },
   data() {
     return {
-      username: "",
+      bankAccount: "",
       amount: 0,
       isshowfield: false,
       CardList: {
@@ -130,7 +134,9 @@ export default {
     },
     RechargeAmount() {
       let params = {
-        bankAccount: this.username,
+        userName: this.user.userName,
+        userPhone: this.user.phonenumber,
+        bankAccount: this.bankAccount,
         amount: this.amount,
       };
       this.invest(params).then((res) => {

@@ -95,17 +95,9 @@ export default {
       };
       this.login(params).then((res) => {
         if (res.token) {
-          this.$comFun.cookie.setCookie("Admin-Token", res.token);
+          this.$comFun.cookie.setCookie("Admin-Tokens", res.token);
           this.setToken("Bearer " + res.token);
-          this.getInfo().then((res) => {
-            if (res.code != "200") return;
-            Toast("登录成功");
-            setTimeout(() => {
-              this.$router.push({
-                path: "Home",
-              });
-            }, 1000);
-          });
+          Toast("登录成功");
         } else {
           this.getCaptchaImage();
         }

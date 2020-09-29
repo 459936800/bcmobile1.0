@@ -26,14 +26,14 @@ instance.interceptors.request.use(
 		// 	'/home/getBankCardList'
 		// ];
 		// const str = noTokenArr.join(',');
-		// if (str.indexOf(config.url) == -1 && comFun.cookie.getCookie('Admin-Token')) {
+		// if (str.indexOf(config.url) == -1 && comFun.cookie.getCookie('Admin-Tokens')) {
 		// 	console.log('settoken');
-		// const token = 'Bearer ' + comFun.cookie.getCookie('Admin-Token');
+		// const token = 'Bearer ' + comFun.cookie.getCookie('Admin-Tokens');
 		// 	token && (config.headers.Authorization = token);
 		// }
-		if (comFun.cookie.getCookie('Admin-Token')) {
+		if (comFun.cookie.getCookie('Admin-Tokens')) {
 			// console.log('settoken');
-			const token = 'Bearer ' + comFun.cookie.getCookie('Admin-Token');
+			const token = 'Bearer ' + comFun.cookie.getCookie('Admin-Tokens');
 			token && (config.headers.Authorization = token);
 		}
 		return config;
@@ -50,7 +50,7 @@ instance.interceptors.response.use(
 			console.log($router.app._route.name);
 			if (res.data.msg.indexOf('/error') != -1 || res.data.msg.indexOf('/getInfo') != -1) {
 				Toast('登录已失效请重新登录');
-				comFun.cookie.clearCookie('Admin-Token');
+				comFun.cookie.clearCookie('Admin-Tokens');
 				store.commit('setUser', null);
 				comFun.cookie.clearCookie('user');
 				store.commit('setToken', null);
@@ -60,7 +60,7 @@ instance.interceptors.response.use(
 			} else {
 				Toast(res.data.msg);
 			}
-			// comFun.cookie.clearCookie('Admin-Token');
+			// comFun.cookie.clearCookie('Admin-Tokens');
 			// setTimeout(() => {
 			// 	// window.location.href = 'http://' + window.location.host + '/login';
 			// }, 3000);

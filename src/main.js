@@ -12,7 +12,7 @@ Vue.use(Vant);
 
 Vue.config.productionTip = false;
 try {
-	store.commit('setToken', comFun.cookie.getCookie('Admin-Token') || null);
+	store.commit('setToken', comFun.cookie.getCookie('Admin-Tokens') || null);
 	store.commit('setUser', JSON.parse(comFun.cookie.getCookie('user')) || store.state.user);
 } catch (error) {
 	store.commit('setUser', null);

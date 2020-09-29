@@ -68,7 +68,11 @@ const api = {
 	// 获取利润
 
 	// POST
-	upload: '/userCenter/upload'
+	upload: '/userCenter/upload',
 	// 上传文件
+
+	// POST
+	refreshUserInfo: '/userCenter/refreshUserInfo'
+	// 刷新用户信息
 };
 export default api;

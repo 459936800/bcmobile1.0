@@ -157,6 +157,50 @@ import { Toast } from "vant";
 export default {
   name: "Lottery",
   components: {},
+  computed: {
+    ...mapGetters({
+      _playtype: "getPlaytype",
+      _showLottery: "getShowLottery",
+      user: "getUser",
+    }),
+    playTypeNum() {
+      switch (this._playtype) {
+        case "和值":
+          return 0;
+          break;
+        case "三同号通选":
+          return 1;
+          break;
+        case "三同号单选":
+          return 2;
+          break;
+        case "三不同号":
+          return 3;
+          break;
+        case "三连号通选":
+          return 4;
+          break;
+        case "二同号复选":
+          return 5;
+          break;
+        case "二同号单选":
+          return 6;
+          break;
+        case "二不同号":
+          return 7;
+          break;
+        default:
+          return -1;
+          break;
+      }
+    },
+
+    classNum() {
+      if (this.playTypeArr[this.playTypeNum].name.indexOf("通选") != -1)
+        return 1;
+      return 0;
+    },
+  },
   data() {
     return {
       websock: null,
@@ -235,18 +279,19 @@ export default {
   },
   created() {},
   mounted() {
-    this.init();
+    this._refreshUserInfo();
   },
   destroyed() {
     console.log("destroyed");
     this.clearDiceAnimation();
     this.websock.close();
     this.websock = null;
-    this.$root.Bus.$off("this_change");
+    this.$root.Bus.$off("Lottery_Refresh");
   },
   watch: {
     $route(n, o) {
       this.LotteryCode = this.$route.query.code;
+      this.LotteryType = this.$route.query.type;
       this.setLotteryShortName(this.$route.query.name.substr(0, 2));
     },
     _playtype(n, o) {
@@ -259,55 +304,13 @@ export default {
       // console.log(n);
     },
   },
-  computed: {
-    ...mapGetters({
-      _playtype: "getPlaytype",
-      _showLottery: "getShowLottery",
-      user: "getUser",
-    }),
-    playTypeNum() {
-      switch (this._playtype) {
-        case "和值":
-          return 0;
-          break;
-        case "三同号通选":
-          return 1;
-          break;
-        case "三同号单选":
-          return 2;
-          break;
-        case "三不同号":
-          return 3;
-          break;
-        case "三连号通选":
-          return 4;
-          break;
-        case "二同号复选":
-          return 5;
-          break;
-        case "二同号单选":
-          return 6;
-          break;
-        case "二不同号":
-          return 7;
-          break;
-        default:
-          return -1;
-          break;
-      }
-    },
 
-    classNum() {
-      if (this.playTypeArr[this.playTypeNum].name.indexOf("通选") != -1)
-        return 1;
-      return 0;
-    },
-  },
   methods: {
     ...mapMutations(["setUser", "setLotteryShortName", "setPlayTypeColumns"]),
     ...mapActions([
       "getLotterys",
       "getInfo",
+      "refreshUserInfo",
       "getPlayTypeByCode",
       "getPlayTypeDetailByCode",
       "getAwardsHistory",
@@ -321,20 +324,30 @@ export default {
       this.AllLotterys = [];
       this.LotteryCode = this.$route.query.code;
       this.LotteryType = this.$route.query.type;
+      this.$root.Bus.$off("Lottery_Refresh");
       this.$root.Bus.$on("Lottery_Refresh", () => {
         _this.Refresh();
       });
+      // this._getLast5Awards();
       this.getNewLotterys();
       this.ThreeDiceAnimation();
       this._getPlayTypeDetailByCode();
-      // this.setLotterysDetall();
       this._getLotterys();
-      // this._getAwardsHistory();
     },
     getNewLotterys() {
       //初始化weosocket
       this.initWebSocket(this.user.userName);
     },
+    _refreshUserInfo() {
+      this.refreshUserInfo().then((res) => {
+        if (res.code != "200") return;
+        const user = res.data;
+        this.$comFun.cookie.setCookie("user", user);
+        this.setUser(res.data);
+        this.init();
+      });
+    },
+    //设置快三期号与中奖号码
     setLotterysDetall() {
       try {
         // let new_t = this.$comFun.methods.getTimer(
@@ -342,6 +355,7 @@ export default {
         //     .stringToDate(this.lotteryDetall.newLottery.lotteryTime)
         //     .getTime()
         // );
+        if (!this.lotteryDetall.lastAwards) return;
         let last_t = this.$comFun.methods.getTimer(
           this.$comFun.methods
             .stringToDate(this.lotteryDetall.lastAwards.lotteryTime)
@@ -372,7 +386,6 @@ export default {
         console.log(this.lotteryDetall.lastAwards.lotteryTime);
         console.log(this.lotteryDetall.lastAwards.lotteryNumber);
         // console.log(this.lotteryDetall.newLottery.lotteryTime);
-
         // this.isLastLottery = false;
         // this.Lotterytime = last_t.mss;
         // console.log(this.lotteryDetall.lastAwards);
@@ -380,7 +393,11 @@ export default {
         // console.log(this.lotteryDetall.newLottery.lotteryNumber);
       } catch (error) {
         console.error(error);
+        this.isLastLottery = true;
         this.websock.close();
+        setTimeout(() => {
+          this.initWebSocket(this.user.userName);
+        }, 5000);
       }
     },
     goToLottery(item) {
@@ -406,11 +423,11 @@ export default {
       };
       switch (this._playtype) {
         case "三不同号":
-          if (this.bettingNumber >= 3) {
+          if (this.bettingNumber == 3) {
             obj.state = true;
             obj.msg = "通过";
           } else {
-            obj.msg = "该玩法需要选至少3个号码。";
+            obj.msg = "该玩法需要只选3个号码。";
           }
           break;
         default:
@@ -421,50 +438,74 @@ export default {
       return obj;
     },
     _buyLottery() {
-      this.overlayShow = true;
+      let now = new Date().toJSON();
       let params = [];
+      let numArr = [];
       let Filter = this.PlayTypeFilter();
-      if (Filter.state) {
-      } else {
+      if (!Filter.state) {
         Toast(Filter.msg);
-        this.overlayShow = false;
         return;
       }
+      if (params.length <= 0 && this.number <= 0) {
+        Toast("请选择玩法和输入金额再确认投注！");
+        return;
+      }
+      this.overlayShow = true;
+      // bettingValue: "2";
+      // playTypeCode: "2";
       this.bettingList.obj.map((item) => {
-        let now = new Date().toJSON();
-        console.log(now);
+        if (this._playtype == "三不同号") {
+          numArr.push(parseInt(item.name));
+        } else {
+          let param = {
+            bettingAmount: this.number,
+            // bettingNumber: this.bettingNumber,
+            bettingNumber: 1,
+            bettingTime: now,
+            bettingValue: item.name,
+            lotteryCode: this.LotteryCode,
+            lotteryNumber: this.lotteryDetall.newLottery.lotteryNumber,
+            lotteryWay: this.playTypeArr[this.playTypeNum].lotteryCode,
+            playType: this.playTypeArr[this.playTypeNum].code,
+            playTypeCode: item.code,
+          };
+          params.push(param);
+        }
+      });
+      if (params.length <= 0) {
+        numArr.sort((a, b) => {
+          const end = a - b;
+          return end;
+        });
+        numArr.join(",");
         let param = {
           bettingAmount: this.number,
-          bettingNumber: this.bettingNumber,
+          // bettingNumber: this.bettingNumber,
+          bettingNumber: 1,
           bettingTime: now,
-          bettingValue: item.name,
-          // lotteryCode: this.LotteryCode,
-          lotteryCode: "ahks",
+          bettingValue: numArr.join(","),
+          lotteryCode: this.LotteryCode,
           lotteryNumber: this.lotteryDetall.newLottery.lotteryNumber,
           lotteryWay: this.playTypeArr[this.playTypeNum].lotteryCode,
           playType: this.playTypeArr[this.playTypeNum].code,
-          playTypeCode: item.code,
+          playTypeCode: this.bettingList.obj[0].code,
         };
         params.push(param);
-      });
-      console.log(params);
-      if (params.length > 0 && this.number > 0) {
-        this.buyLottery(params).then((res) => {
-          this.overlayShow = false;
-          if (res.code != "200") return;
-          Toast("投注成功！");
-          // console.log(res);
-          this.getInfo().then((res) => {
-            if (res.code != "200") return;
-            const user = JSON.stringify(res.user);
-            this.$comFun.cookie.setCookie("user", user);
-            this.setUser(res.user);
-          });
-        });
-      } else {
-        Toast("请选择玩法和输入金额再确认投注！");
-        this.overlayShow = false;
       }
+      console.log(params);
+      this.buyLottery(params).then((res) => {
+        this.overlayShow = false;
+        if (res.code != "200") return;
+        Toast("投注成功！");
+        // console.log(res);
+        this.refreshUserInfo().then((res) => {
+          console.log(res);
+          if (res.code != "200") return;
+          const user = res.data;
+          this.$comFun.cookie.setCookie("user", user);
+          this.setUser(res.data);
+        });
+      });
     },
     // _addBetting() {
     // 	let now = new Date().toJSON();
@@ -530,14 +571,14 @@ export default {
         });
       }
     },
-    // _getLast5Awards() {
-    //   let params = {
-    //     code: "ahks",
-    //   };
-    //   this.getLast5Awards(params).then((res) => {
-    //     console.log(res);
-    //   });
-    // },
+    _getLast5Awards() {
+      let params = {
+        code: "ahks",
+      };
+      this.getLast5Awards(params).then((res) => {
+        console.log(res);
+      });
+    },
     // _getAwardsHistory() {
     //   let params = {
     //     code: "ahks",
@@ -658,7 +699,7 @@ export default {
 
       console.log("初始化weosocket");
       const wsuri =
-        $conf.wsUrl + "ws/lottery/" + this.$route.query.code + "/" + userId;
+        $conf.wsUrl + "ws/lottery/" + this.LotteryCode + "/" + userId;
       console.log(wsuri);
       this.websock = new WebSocket(wsuri);
       this.websock.onmessage = this.websocketonmessage;
@@ -679,6 +720,7 @@ export default {
     },
     websocketonmessage(e) {
       //数据接收
+      if (this.$route.name != "Lottery") this.websock.close();
       let str = e.data;
       console.log(JSON.parse(str));
       if (str.length > 2) {
