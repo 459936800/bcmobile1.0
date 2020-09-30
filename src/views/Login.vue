@@ -98,8 +98,14 @@ export default {
           this.$comFun.cookie.setCookie("Admin-Tokens", res.token);
           this.setToken("Bearer " + res.token);
           Toast("登录成功");
+          setTimeout(() => {
+            this.$router.push({
+              path: "Home",
+            });
+          }, 1000);
         } else {
           this.getCaptchaImage();
+          this.code = null;
         }
         this.loadingShow = false;
       });

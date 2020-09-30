@@ -64,7 +64,7 @@
         <router-view />
       </transition>
     </div>
-
+    <!-- 底部 -->
     <van-tabbar
       v-if="showTabbar"
       @change="onChange"
@@ -98,7 +98,7 @@ export default {
     return {
       active: "Home",
       title: "登录",
-      playTypeTitle: "和值1",
+      playTypeTitle: "和值",
       leftText: "返回",
       rightText: null,
       show: false,

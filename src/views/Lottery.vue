@@ -105,7 +105,13 @@
           <div v-if="bettingNumber != 0" @click="Refresh" class="fl">清空</div>
           <!-- <div v-else class="fl">机选</div> -->
           <p class="fl">
-            <i style="color: rgb(255, 163, 25)">{{ bettingNumber }}</i
+            <i style="color: rgb(255, 163, 25)">{{
+              _playtype == "三不同号"
+                ? bettingNumber == 0
+                  ? 0
+                  : 1
+                : bettingNumber
+            }}</i
             >注，
             <i style="color: rgb(255, 163, 25)">{{
               numFilter(number * bettingNumber * playTypeNumber, 0)
@@ -300,9 +306,7 @@ export default {
     _showLottery(n, o) {
       this.showLottery = this._showLottery;
     },
-    Lotterytime(n, o) {
-      // console.log(n);
-    },
+    Lotterytime(n, o) {},
   },
 
   methods: {
@@ -355,7 +359,7 @@ export default {
         //     .stringToDate(this.lotteryDetall.newLottery.lotteryTime)
         //     .getTime()
         // );
-        if (!this.lotteryDetall.lastAwards) return;
+
         let last_t = this.$comFun.methods.getTimer(
           this.$comFun.methods
             .stringToDate(this.lotteryDetall.lastAwards.lotteryTime)
@@ -451,18 +455,16 @@ export default {
         return;
       }
       this.overlayShow = true;
-      // bettingValue: "2";
-      // playTypeCode: "2";
       this.bettingList.obj.map((item) => {
         if (this._playtype == "三不同号") {
-          numArr.push(parseInt(item.name));
+          numArr.push(parseInt(item.code));
         } else {
           let param = {
             bettingAmount: this.number,
             // bettingNumber: this.bettingNumber,
             bettingNumber: 1,
             bettingTime: now,
-            bettingValue: item.name,
+            bettingValue: item.code,
             lotteryCode: this.LotteryCode,
             lotteryNumber: this.lotteryDetall.newLottery.lotteryNumber,
             lotteryWay: this.playTypeArr[this.playTypeNum].lotteryCode,
@@ -539,6 +541,7 @@ export default {
         console.log(res);
 
         res.data.map((item) => {
+          if (item.name.indexOf("二") != -1) return;
           arr.push(item.name);
           item.playTypeList.map((item0, index) => {
             item0.index = index;
@@ -615,7 +618,7 @@ export default {
       this.number = parseInt(value);
       if (this.number > 100000) {
         this.number = 100000;
-        Toast("目前只支持一注购买10000元");
+        Toast("目前只支持一注购买100000元");
       }
     },
     onInputBettingNumber(value) {
@@ -670,6 +673,7 @@ export default {
       this.startDiceAnimation(this.$refs.rDice3);
     },
     check_btn(item) {
+      console.log(item);
       if (this.$refs.check_btn[item.index].classList.length == 0) {
         this.bettingNumber++;
         this.$refs.check_btn[item.index].classList.add("checked");
@@ -697,7 +701,7 @@ export default {
       //初始化weosocket
       // code jzks  ahks
 
-      console.log("初始化weosocket");
+      console.log("初始化websocket");
       const wsuri =
         $conf.wsUrl + "ws/lottery/" + this.LotteryCode + "/" + userId;
       console.log(wsuri);

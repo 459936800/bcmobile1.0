@@ -1,5 +1,6 @@
 <template>
-  <div class="BettingRecord">
+  <div class="AwardsHistory">
+    <!-- 彩票历史投注明细 -->
     <van-tabs sticky v-model="activeName" @click="onRefresh">
       <van-tab
         v-for="tab of tabsList"
@@ -17,15 +18,8 @@
             <van-row v-for="item in RecordsList" :key="item.id">
               <van-col>
                 <div>
-                  <p>中奖状态</p>
-                  <van-cell :title="_getStatus(item.status)" />
-                </div>
-              </van-col>
-
-              <van-col>
-                <div>
                   <p>期号</p>
-                  <van-cell class="value1" :title="item.awardNumber" />
+                  <van-cell class="value1" :title="item.lotteryNumber" />
                 </div>
               </van-col>
               <van-col>
@@ -36,32 +30,14 @@
               </van-col>
               <van-col>
                 <div>
-                  <p>玩法</p>
-                  <van-cell :title="item.playTypeName" />
+                  <p>开奖号码</p>
+                  <van-cell :title="item.lotteryValue" />
                 </div>
               </van-col>
               <van-col>
                 <div>
-                  <p>投注</p>
-                  <van-cell class="value1" :title="item.bettingValue" />
-                </div>
-              </van-col>
-              <van-col>
-                <div>
-                  <p>注数</p>
-                  <van-cell :title="item.bettingNumber" />
-                </div>
-              </van-col>
-              <van-col>
-                <div>
-                  <p>每注金额</p>
-                  <van-cell :title="item.bettingPrice" />
-                </div>
-              </van-col>
-              <van-col>
-                <div>
-                  <p>投注时间</p>
-                  <van-cell style="width: 100%" :title="item.bettingTime" />
+                  <p>开奖时间</p>
+                  <van-cell style="width: 100%" :title="item.lotteryTime" />
                 </div>
               </van-col>
             </van-row>
@@ -78,27 +54,23 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 import { Toast } from "vant";
 
 export default {
-  name: "BettingRecord",
+  name: "AwardsHistory",
   components: {},
   computed: {
-    getStatus() {
+    getAwards() {
       switch (this.activeName) {
         // 全部则status不传，已中奖status：WIN，
         // 未中奖：UNWIN，等待开奖：CALING
-        case "全部":
-          return null;
+        case "近30期":
+          return 30;
           break;
-        case "等待开奖":
-          return "CALING";
+        case "近50期":
+          return 50;
           break;
-        case "已中奖":
-          return "WIN";
-          break;
-        case "未中奖":
-          return "UNWIN";
-          break;
+        case "近100期":
+          return 100;
         default:
-          return "";
+          return 30;
           break;
       }
     },
@@ -106,10 +78,9 @@ export default {
   data() {
     return {
       tabsList: [
-        { id: 0, title: "全部", name: "全部" },
-        { id: 1, title: "等待开奖", name: "等待开奖" },
-        { id: 2, title: "已中奖", name: "已中奖" },
-        { id: 3, title: "未中奖", name: "未中奖" },
+        { id: 0, title: "近30期", name: "近30期" },
+        { id: 1, title: "近50期", name: "近50期" },
+        { id: 2, title: "近100期", name: "近100期" },
       ],
       page: 1,
       isloading: true,
@@ -117,7 +88,7 @@ export default {
       loading: false,
       finished: false,
       RecordsList: [],
-      activeName: "全部",
+      activeName: "近30期",
       userName: "",
     };
   },
@@ -133,32 +104,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getBettingRecord", "getBettingRecordList"]),
+    ...mapActions(["getAwardsHistory", "getAwardsHistoryList"]),
     init() {
       this.page = 1;
       this.RecordsList = [];
       // this.onLoad();
-    },
-    _getStatus(name) {
-      switch (name) {
-        // 全部则status不传，已中奖status：WIN，
-        // 未中奖：UNWIN，等待开奖：CALING
-        case "":
-          return "未中奖";
-          break;
-        case "CALING":
-          return "等待开奖";
-          break;
-        case "WIN":
-          return "已中奖";
-          break;
-        case "UNWIN":
-          return "未中奖";
-          break;
-        default:
-          return "未中奖";
-          break;
-      }
     },
     onLoad() {
       // 异步更新数据
@@ -169,9 +119,10 @@ export default {
         this.refreshing = false;
       }
       this.loading = true;
+      this.isloading = false;
 
       setTimeout(() => {
-        this._getBettingRecord();
+        this._getAwardsHistory();
       }, 1000);
     },
     onRefresh() {
@@ -183,29 +134,29 @@ export default {
       // 将 loading 设置为 true，表示处于加载状态
       if (!this.loading) this.onLoad();
     },
-    _getBettingRecord() {
+    _getAwardsHistory() {
       // {"current":1,"size":30,"data":{"status":"UNWIN"}}
       // 全部则status不传，已中奖status：WIN，
       // 未中奖：UNWIN，等待开奖：CALING
       this.isloading = true;
       let params = {
-        current: this.page,
-        size: 10,
-        data: {
-          status: this.getStatus,
-        },
+        code: this.$route.query.code,
+        num: this.getAwards,
       };
-      console.log(params);
-      this.getBettingRecord(params).then((res) => {
+      this.getAwardsHistory(params).then((res) => {
         // console.log(res);
         // Toast(res.msg);
-        if (res.data && res.data.length > 0) {
-          this.RecordsList = this.RecordsList.concat(res.data);
+
+        if (res.data && res.data.records.length > 0) {
+          if (this.page == 1) res.data.records.shift();
+          this.RecordsList = this.RecordsList.concat(res.data.records);
           this.page++;
         } else {
           this.finished = true;
           this.isloading = false;
         }
+        this.finished = true;
+        this.isloading = false;
         this.loading = false;
       });
     },
@@ -213,7 +164,7 @@ export default {
 };
 </script>
 <style lang="less">
-.BettingRecord {
+.AwardsHistory {
   .van-list {
     overflow-x: scroll;
     margin: 1em;

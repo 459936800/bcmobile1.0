@@ -57,6 +57,7 @@
       />
       <van-field
         v-model="amount"
+        @input="onInput"
         type="number"
         name="充值金额"
         label="充值金额"
@@ -114,6 +115,14 @@ export default {
     ...mapActions(["invest", "getBankCardList"]),
     init() {
       this._getBankCardList();
+    },
+    onInput(value) {
+      if (!value) return;
+      this.amount = parseInt(value);
+      if (this.amount > 100000) {
+        this.amount = 100000;
+        Toast("最多100000元");
+      }
     },
     copyLink(id) {
       const _this = this;

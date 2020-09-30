@@ -47,12 +47,13 @@
           <div style="width: 4.8rem">提现</div>
         </div>
       </router-link>
-      <router-link :to="{ name: '客服中心' }">
+
+      <router-link :to="{ name: '历史概览' }">
         <div>
           <div class="defFont m2">
-            <van-icon name="service" size="1.5rem" />
+            <van-icon name="bill" size="1.5rem" />
           </div>
-          <div style="width: 4.8rem">客服</div>
+          <div style="width: 4.8rem">历史记录</div>
         </div>
       </router-link>
       <router-link :to="{ name: '消息中心' }">
@@ -69,6 +70,14 @@
             <van-icon name="manager" size="1.5rem" />
           </div>
           <div style="width: 4.8rem">我的</div>
+        </div>
+      </router-link>
+      <router-link :to="{ name: '客服中心' }">
+        <div>
+          <div class="defFont m2">
+            <van-icon name="service" size="1.5rem" />
+          </div>
+          <div style="width: 4.8rem">客服</div>
         </div>
       </router-link>
     </div>
@@ -98,8 +107,8 @@
       </van-col>
     </van-grid>
     <!-- 上传图片 -->
-    <van-uploader :after-read="afterRead" :max-count="1" />
-    <img :src="imgUrl + images" alt="" />
+    <!-- <van-uploader :after-read="afterRead" :max-count="1" />
+    <img :src="imgUrl + images" alt="" /> -->
   </div>
 </template>
 

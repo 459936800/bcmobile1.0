@@ -4,7 +4,7 @@
       <div class="top_content">
         <div>
           <div>个人盈亏（元）</div>
-          <div>{{ data1.total }}</div>
+          <h2>{{ data1.total }}</h2>
         </div>
       </div>
     </van-row>
@@ -105,14 +105,9 @@ export default {
       font-size: 0.82em;
       color: #616161;
     }
-    .value {
-      text-align: left;
-      padding: 5px;
-      font-size: 0.65em;
-      color: #fff;
-    }
+
     .value0 {
-      font-size: 0.78em;
+      font-size: 1em;
       color: #ff2929;
     }
   }

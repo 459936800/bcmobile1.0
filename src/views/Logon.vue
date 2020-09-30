@@ -1,7 +1,7 @@
 <template>
   <div class="Logon">
     <van-form @submit="onSubmit">
-      <van-field @click="dialogShow = !dialogShow" name="头像" label="头像">
+      <!-- <van-field @click="dialogShow = !dialogShow" name="头像" label="头像">
         <template #input>
           <div class="img_div">
             <van-image
@@ -12,7 +12,7 @@
             />
           </div>
         </template>
-      </van-field>
+      </van-field> -->
       <van-field
         v-model="invite"
         name="邀请码"
@@ -125,8 +125,8 @@ export default {
       dialogShow: false,
       fileList: [],
       imgUrl: $conf.imgUrl,
-      avatar: "/profile/upload/2020/09/25/039912c3f13ce661e8fe102496167251.gif",
-      // avatar: "u1.png",
+      // avatar: "/profile/upload/2020/09/25/039912c3f13ce661e8fe102496167251.gif",
+      avatar: "u1.png",
       email: "",
       fundPassword: "",
       invite: "",

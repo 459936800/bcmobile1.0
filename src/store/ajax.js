@@ -48,7 +48,7 @@ instance.interceptors.response.use(
 		if (res.data.code != 200 && $router.app._route.name != '首页') {
 			console.log(res.data.msg);
 			console.log($router.app._route.name);
-			if (res.data.msg.indexOf('/error') != -1 || res.data.msg.indexOf('/getInfo') != -1) {
+			if (res.data.msg.indexOf('/error') != -1 || res.data.msg.indexOf('/refreshUserInfo') != -1) {
 				Toast('登录已失效请重新登录');
 				comFun.cookie.clearCookie('Admin-Tokens');
 				store.commit('setUser', null);
