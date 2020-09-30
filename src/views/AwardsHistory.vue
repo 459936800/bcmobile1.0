@@ -25,7 +25,8 @@
               <van-col>
                 <div>
                   <p>彩票号码</p>
-                  <van-cell :title="item.lotteryCodeName" />
+                  <van-cell :title="item.lotteryCode" />
+                  <!-- <van-cell :title="item.lotteryCodeName" /> -->
                 </div>
               </van-col>
               <van-col>
@@ -146,7 +147,6 @@ export default {
       this.getAwardsHistory(params).then((res) => {
         // console.log(res);
         // Toast(res.msg);
-
         if (res.data && res.data.records.length > 0) {
           if (this.page == 1) res.data.records.shift();
           this.RecordsList = this.RecordsList.concat(res.data.records);
