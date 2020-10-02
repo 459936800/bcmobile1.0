@@ -361,7 +361,6 @@
 				this.ThreeDiceAnimation();
 				this._getPlayTypeDetailByCode();
 				this._getLotterys();
-				this._getAwardsHistory();
 			},
 			getNewLotterys() {
 				//初始化weosocket
@@ -421,6 +420,7 @@
 					// console.log(this.lotteryDetall.lastAwards);
 					// console.log(last_t.timer);
 					// console.log(this.lotteryDetall.newLottery.lotteryNumber);
+					this._getAwardsHistory();
 				} catch (error) {
 					console.error(error);
 					this.isLastLottery = true;
@@ -616,6 +616,9 @@
 					res.data.records.map(item => {
 						let arr = [];
 						let sum = 0;
+						if (!item.lotteryValue) {
+							item.lotteryValue = "6,6,6";
+						}
 						arr = item.lotteryValue.split(",");
 						arr.map(num => {
 							sum = sum + parseInt(num);
@@ -626,7 +629,6 @@
 						sum % 2 == 0 ? (item.ds = "双") : (item.ds = "单");
 					});
 					this.RecordsList = res.data.records;
-					console.log(res);
 				});
 			},
 

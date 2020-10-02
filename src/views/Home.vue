@@ -124,7 +124,7 @@
 						type: "ks",
 						code: "ahks",
 						name: "安徽快3",
-						pic: 0,
+						pic: "ks.png",
 						tip: "15分钟1期"
 					},
 					{
@@ -132,7 +132,7 @@
 						type: "ks",
 						code: "gdks",
 						name: "广东快3",
-						pic: 0,
+						pic: "ks.png",
 						tip: "15分钟1期"
 					},
 					{
@@ -140,7 +140,7 @@
 						type: "ks",
 						code: "njks",
 						name: "南京快3",
-						pic: 0,
+						pic: "ks.png",
 						tip: "15分钟1期"
 					}
 				]
