@@ -227,13 +227,13 @@
 						background-color: grey;
 					}
 					.van-cell {
-						width: 5.5rem;
+						min-width: 5.5rem;
 						font-size: 1em;
 						text-overflow: ellipsis;
 						white-space: nowrap;
 					}
 					.value1 {
-						width: 7rem;
+						min-width: 7rem;
 						overflow: hidden;
 						text-overflow: ellipsis;
 						white-space: nowrap;

@@ -8,7 +8,7 @@
 						<van-row v-for="(item, i) in RecordsList" :key="item.id">
 							<van-cell is-link @click="toDetail(item)">
 								<van-col :span="4">
-									<van-image round width="2.5rem" height="2.5rem" :src="require('../assets/image/ks.png')" />
+									<van-image round width="2.5rem" height="2.5rem" :src="require('../assets/image/'+AwardList[i].pic)" />
 									<span>{{ item.name }}</span>
 								</van-col>
 								<van-col :span="20">
@@ -124,6 +124,35 @@
 				// 将 loading 设置为 true，表示处于加载状态
 				if (!this.loading) this.onLoad();
 			},
+      setLotteryDetall(item) {
+				switch (item.lotteryCode) {
+					case "jzks":
+						item.tip = "1分钟1期";
+						item.pic = "ks.png";
+						break;
+					case "jz3ks":
+						item.tip = "3分钟1期";
+						item.pic = "ks3.png";
+						break;
+					case "jz5ks":
+						item.tip = "5分钟1期";
+						item.pic = "ks5.png";
+						break;
+					case "jz8ks":
+						item.tip = "8分钟1期";
+						item.pic = "ks8.png";
+						break;
+					case "jz10ks":
+						item.tip = "10分钟1期";
+						item.pic = "ks10.png";
+						break;
+					default:
+						item.tip = "1分钟1期";
+						item.pic = "ks.png";
+						break;
+				}
+				return item;
+			},
 			_getOverviewHistory() {
 				this.isloading = true;
 				let params = {
@@ -156,6 +185,7 @@
 				};
 				this.getAwardsHistory(params).then(res => {
 					if (res.data.records.length <= 0) return;
+						res.data.records[1] = this.setLotteryDetall(res.data.records[1]);
 					this.AwardList.push(res.data.records[1]);
 					if (this.RecordsList.length - 1 > this.index) {
 						this.index++;
@@ -183,7 +213,9 @@
 				display: flex;
 				padding-right: 1em;
 				.van-col {
-					width: 100vh;
+          width: 100vh;
+          						text-overflow: ellipsis;
+						white-space: nowrap;
 					display: flex;
 					align-items: center;
 					.van-cell {
