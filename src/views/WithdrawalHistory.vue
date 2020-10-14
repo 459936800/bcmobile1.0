@@ -1,5 +1,5 @@
 <template>
-	<div class="BettingRecord">
+	<div class="WithdrawalHistory">
 		<van-tabs sticky v-model="activeName" @click="onRefresh">
 			<van-tab v-for="tab of tabsList" :key="tab.id" :title="tab.title" :name="tab.name">
 				<van-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -23,26 +23,24 @@
   import tableComponents from "components/table-components" ;
 	
   export default {
-		name: "BettingRecord",
+		name: "WithdrawalHistory",
 		components: {
       tableComponents
     },
 		computed: {
 			getStatus() {
+        let now = new Date();
+        let lastday= new Date(now.getTime()-24*60*60*1000*1)
+        let last7day= new Date(now.getTime()-24*60*60*1000*7)
 				switch (this.activeName) {
-					// 全部则status不传，已中奖status：WIN，
-					// 未中奖：UNWIN，等待开奖：CALING
-					case "全部":
-						return null;
+					case "当日":
+						return now.toJSON().split('T')[0]+" 00:00:00";
 						break;
-					case "等待开奖":
-						return "CALING";
+					case "昨天":
+						return lastday.toJSON().split('T')[0]+" 00:00:00";
 						break;
-					case "已中奖":
-						return "WIN";
-						break;
-					case "未中奖":
-						return "UNWIN";
+					case "近7日":
+						return last7day.toJSON().split('T')[0]+" 00:00:00";
 						break;
 					default:
 						return "";
@@ -53,10 +51,9 @@
 		data() {
 			return {
 				tabsList: [
-					{ id: 0, title: "全部", name: "全部" },
-					{ id: 1, title: "等待开奖", name: "等待开奖" },
-					{ id: 2, title: "已中奖", name: "已中奖" },
-					{ id: 3, title: "未中奖", name: "未中奖" }
+					{ id: 0, title: "当日", name: "当日" },
+					{ id: 1, title: "昨天", name: "昨天" },
+					{ id: 2, title: "近7日", name: "近7日" },
 				],
 				page: 1,
 				isloading: true,
@@ -65,14 +62,14 @@
 				finished: false,
         table1:{
           tableHeader:[
-            {name:'中奖状态',key:'status'},
-            {name:'期号',key:'awardNumber'},
-            {name:'彩票号码',key:'lotteryCodeName'},
-            {name:'玩法',key:'playTypeName'},
-            {name:'投注',key:'bettingValue'},
-            {name:'注数',key:'bettingNumber'},
-            {name:'每注金额',key:'bettingPrice'},
-            {name:'投注时间',key:'bettingTime'},
+            {name:'金额',key:'amount'},
+            {name:'真实姓名',key:'approveName'},
+            {name:'号码',key:'bankAccount'},
+            {name:'银行名称',key:'bankName'},
+            {name:'支行地址',key:'bankAddress'},
+            {name:'状态',key:'statusName'},
+            {name:'支付类型',key:'type'},
+            {name:'创建时间',key:'time'},
           ],
           tableBody:[]
         },
@@ -92,33 +89,28 @@
 			}
 		},
 		methods: {
-			...mapActions(["getBettingRecord", "getBettingRecordList"]),
+			...mapActions(["myWithdraw"]),
 			init() {
 				this.page = 1;
 				this.table1.tableBody = [];
 				// this.onLoad();
 			},
-			_getStatus(name) {
-				switch (name) {
-					// 全部则status不传，已中奖status：WIN，
-					// 未中奖：UNWIN，等待开奖：CALING
-					case "":
-						return "未中奖";
-						break;
-					case "CALING":
-						return "等待开奖";
-						break;
-					case "WIN":
-						return "已中奖";
-						break;
-					case "UNWIN":
-						return "未中奖";
-						break;
-					default:
-						return "未中奖";
-						break;
-				}
-			},
+      getType(name){
+          switch (name) {
+            case "":
+              return "空";
+              break;
+            case "BANK":
+              return "银行卡";
+              break;
+            case "WECHAT":
+              return "微信";
+              break;
+            default:
+              return name;
+              break;
+          }
+        },
 			onLoad() {
 				// 异步更新数据
 				// setTimeout 仅做示例，真实场景中一般为 ajax 请求
@@ -130,7 +122,7 @@
 				this.loading = true;
 
 				setTimeout(() => {
-					this._getBettingRecord();
+					this._getWithdrawalHistory();
 				}, 1000);
 			},
 			onRefresh() {
@@ -142,33 +134,26 @@
 				// 将 loading 设置为 true，表示处于加载状态
 				if (!this.loading) this.onLoad();
 			},
-			_getBettingRecord() {
+			_getWithdrawalHistory() {
 				// {"current":1,"size":30,"data":{"status":"UNWIN"}}
 				// 全部则status不传，已中奖status：WIN，
 				// 未中奖：UNWIN，等待开奖：CALING
+        let now = new Date().toJSON().split('T')[0];
 				this.isloading = true;
 				let params = {
 					current: this.page,
 					size: 100,
-					data: {
-						status: this.getStatus
-					}
+          beingTime: this.getStatus,
 				};
-				console.log(params);
-				this.getBettingRecord(params).then(res => {
+				this.myWithdraw(params).then(res => {
 					// console.log(res);
 					// Toast(res.msg);
-					if (res.data && res.data.length > 0) {
-            this.table1.tableBody=this.table1.tableBody.concat(res.data)
+					if (res.data && res.data.records.length > 0) {
+            this.table1.tableBody=this.table1.tableBody.concat(res.data.records)
             this.table1.tableBody.map(item => {
-							if (item.status == "WIN") {
-								item.bgcolor = "red";
-							} else {
-								item.bgcolor = "grey";
-							}
-              item.status = this._getStatus(item.status)
-						});
-						this.page++;
+                item.type = this.getType(item.type)
+            });
+            this.page++;
 					} else {
 						this.finished = true;
 						this.isloading = false;
@@ -180,7 +165,7 @@
 	};
 </script>
 <style lang="less">
-	.BettingRecord {
+	.WithdrawalHistory {
 		.van-list {
 			overflow-x: scroll;
 			margin: 1em;

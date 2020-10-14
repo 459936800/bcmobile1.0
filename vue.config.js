@@ -69,6 +69,7 @@ module.exports = {
 		config.plugins = [ ...config.plugins, ...plugins, new LodashModuleReplacementPlugin() ];
 	},
 	chainWebpack: (config) => {
+		config.resolve.alias.set('components', resolve('src/components'));
 		config.plugin('provide').use(webpack.ProvidePlugin, [
 			{
 				$conf: resolve('src/projectConfig.js')

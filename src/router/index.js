@@ -15,6 +15,9 @@ import BettingRecord from '../views/BettingRecord.vue';
 import AwardsHistory from '../views/AwardsHistory.vue';
 import OverviewHistory from '../views/OverviewHistory.vue';
 import Profit from '../views/Profit.vue';
+import WithdrawalHistory from '../views/WithdrawalHistory.vue';
+
+WithdrawalHistory;
 
 Vue.use(VueRouter);
 
@@ -99,6 +102,11 @@ const routes = [
 		path: '/Profit',
 		name: '今日盈亏',
 		component: Profit
+	},
+	{
+		path: '/WithdrawalHistory',
+		name: '提现记录',
+		component: WithdrawalHistory
 	}
 ];
 

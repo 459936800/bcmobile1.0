@@ -173,7 +173,6 @@
 					<td>{{item.ds}}</td>
 				</tr>
 			</table>
-			<table class="openPast thead"></table>
 		</van-dialog>
 	</div>
 </template>
@@ -395,6 +394,7 @@
 					this.newTime = this.lotteryDetall;
 					// 计算如果最新数据还没,前端续一分钟
 					if (last_t.mss <= 0 && this.Lotterytime <= 0) {
+            Toast("开奖时间异常！=>"+this.lotteryDetall.lastAwards.lotteryTime)
 						this.isLastLottery = true;
 						this.Lotterytime = 1000 * 61;
 					} else if (this.Lotterytime <= 0) {
@@ -410,10 +410,10 @@
 
 					this.Lotterytime = this.Lotterytime - 1000;
 
-					console.log(this.Lotterytime);
-					console.log(this.lotteryDetall.lastAwards.lotteryTime);
-					console.log(this.lotteryDetall.systemTime);
-					console.log(this.lotteryDetall.lastAwards.lotteryNumber);
+					console.log('时间：'+this.Lotterytime);
+					console.log('开奖时间：'+this.lotteryDetall.lastAwards.lotteryTime);
+					console.log('当期时间'+this.lotteryDetall.systemTime);
+					console.log('期号：'+this.lotteryDetall.lastAwards.lotteryNumber);
 					// console.log(this.lotteryDetall.newLottery.lotteryTime);
 					// this.isLastLottery = false;
 					// this.Lotterytime = last_t.mss;

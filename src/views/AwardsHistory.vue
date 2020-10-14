@@ -15,33 +15,11 @@
             finished-text="没有更多了"
             @load="onLoad"
           >
-            <van-row v-for="item in RecordsList" :key="item.id">
-              <van-col>
-                <div>
-                  <p>期号</p>
-                  <van-cell class="value1" :title="item.lotteryNumber" />
-                </div>
-              </van-col>
-              <van-col>
-                <div>
-                  <p>彩票号码</p>
-                  <van-cell :title="item.lotteryCode" />
-                  <!-- <van-cell :title="item.lotteryCodeName" /> -->
-                </div>
-              </van-col>
-              <van-col>
-                <div>
-                  <p>开奖号码</p>
-                  <van-cell :title="item.lotteryValue" />
-                </div>
-              </van-col>
-              <van-col>
-                <div>
-                  <p>开奖时间</p>
-                  <van-cell style="width: 100%" :title="item.lotteryTime" />
-                </div>
-              </van-col>
-            </van-row>
+          <table-components
+            :tableHeader="table.tableHeader"
+            :tableBody="table.tableBody"
+            >
+         </table-components>
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -53,10 +31,13 @@
 // @ is an alias to /src
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import { Toast } from "vant";
+import tableComponents from "components/table-components" ;
 
 export default {
   name: "AwardsHistory",
-  components: {},
+  components: {
+    tableComponents
+  },
   computed: {
     getAwards() {
       switch (this.activeName) {
@@ -88,7 +69,15 @@ export default {
       refreshing: false,
       loading: false,
       finished: false,
-      RecordsList: [],
+      table:{
+        tableHeader:[
+          {name:'期号',key:'lotteryNumber'},
+          {name:'彩票号码',key:'lotteryCode'},
+          {name:'开奖号码',key:'lotteryValue'},
+          {name:'开奖时间',key:'lotteryTime'},
+        ],
+        tableBody:[]
+      },
       activeName: "近30期",
       userName: "",
     };
@@ -108,7 +97,7 @@ export default {
     ...mapActions(["getAwardsHistory", "getAwardsHistoryList"]),
     init() {
       this.page = 1;
-      this.RecordsList = [];
+      this.table.tableBody = [];
       // this.onLoad();
     },
     onLoad() {
@@ -116,7 +105,7 @@ export default {
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       console.log("onload");
       if (this.refreshing) {
-        this.RecordsList = [];
+        this.table.tableBody = [];
         this.refreshing = false;
       }
       this.loading = true;
@@ -128,7 +117,6 @@ export default {
     },
     onRefresh() {
       // 清空列表数据
-
       this.finished = false;
       this.page = 1;
       // 重新加载数据
@@ -136,9 +124,6 @@ export default {
       if (!this.loading) this.onLoad();
     },
     _getAwardsHistory() {
-      // {"current":1,"size":30,"data":{"status":"UNWIN"}}
-      // 全部则status不传，已中奖status：WIN，
-      // 未中奖：UNWIN，等待开奖：CALING
       this.isloading = true;
       let params = {
         code: this.$route.query.code,
@@ -147,14 +132,24 @@ export default {
       this.getAwardsHistory(params).then((res) => {
         // console.log(res);
         // Toast(res.msg);
-        if (res.data && res.data.records.length > 0) {
-          if (this.page == 1) res.data.records.shift();
-          this.RecordsList = this.RecordsList.concat(res.data.records);
-          this.page++;
-        } else {
-          this.finished = true;
-          this.isloading = false;
-        }
+        // if (res.data && res.data.records.length > 0) {
+        if (this.page == 1) res.data.records.shift();
+        let data =res.data.records
+        this.table.tableBody = data;
+        // console.log(this.table.tableBody);
+        // this.table.tableBody.map(item => {
+        // 		if (item.status == "WIN") {
+        // 			item.bgcolor = "red";
+        // 		} else {
+        // 			item.bgcolor = "grey";
+        // 		}
+        //     item.status = this._getStatus(item.status)
+        // 	});
+        // this.page++;
+        // } else {
+          // this.finished = true;
+          // this.isloading = false;
+        // }
         this.finished = true;
         this.isloading = false;
         this.loading = false;

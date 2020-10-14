@@ -80,12 +80,12 @@
 					<span>今日盈亏</span>
 				</van-cell>
 			</router-link>
-			<router-link :to="{ name: '提现充值记录' }">
+			<router-link :to="{ name: '提现记录' }">
 				<van-cell is-link>
 					<div class="defFont_userCenter m1">
 						<van-icon name="balance-list" size="1rem" />
 					</div>
-					<span>提现充值记录</span>
+					<span>提现记录</span>
 				</van-cell>
 			</router-link>
 			<router-link :to="{ name: '登录' }">

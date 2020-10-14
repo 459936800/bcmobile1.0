@@ -5,16 +5,16 @@ var exportsFun = {
 	get baseUrl() {
 		// var test = 'http://wycc168.com/prod-api/',
 		// 	prod = 'http://wycc168.com/prod-api/';
-		var test = 'http://10.8.1.100:83/prod-api/',
-			prod = 'http://wycc168.com/prod-api/';
+		var test = 'https://10.8.1.100:83/prod-api/',
+			prod = 'https://wycc168.com/prod-api/';
 		console.log('接口头');
 		console.log(this.isTest ? test : prod);
 
 		return this.isTest ? test : prod;
 	},
 	get imgUrl() {
-		var test = 'http://10.8.1.100:83/prod-api',
-			prod = 'http://wycc168.com/prod-api';
+		var test = 'https://10.8.1.100:83/prod-api',
+			prod = 'https://wycc168.com/prod-api';
 		return this.isTest ? test : prod;
 	},
 	get wsUrl() {

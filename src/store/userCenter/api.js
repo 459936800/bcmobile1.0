@@ -72,7 +72,11 @@ const api = {
 	// 上传文件
 
 	// POST
-	refreshUserInfo: '/userCenter/refreshUserInfo'
+	refreshUserInfo: '/userCenter/refreshUserInfo',
+	// 刷新用户信息
+
+	// POST
+	myWithdraw: '/userCenter/myWithdraw'
 	// 刷新用户信息
 };
 export default api;

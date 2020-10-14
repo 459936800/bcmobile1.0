@@ -84,6 +84,9 @@ const actions = {
 	},
 	refreshUserInfo({}, param, option) {
 		return ajax.$post(api.refreshUserInfo, param, option);
+	},
+	myWithdraw({}, param, option) {
+		return ajax.$post(api.myWithdraw, param, option);
 	}
 };
 

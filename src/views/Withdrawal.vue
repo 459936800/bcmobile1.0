@@ -1,13 +1,14 @@
 <template>
   <div class="Withdrawal">
     <van-form @submit="WithdrawalAmount">
-      <!-- <van-field
+      <van-field
 				v-model="userName"
-				name="提现人"
-				label="提现人"
-				placeholder="提现人"
-				:rules="[{ required: true, message: '请填写提现人' }]"
-			/>-->
+				name="真实姓名"
+				label="真实姓名"
+				placeholder="真实姓名"
+				:rules="[{ required: true, message: '请填写真实姓名' }]"
+        :disabled="userName.length>0"
+			/>
       <van-field
         v-model="bank_account"
         name="银行卡号"
@@ -70,8 +71,10 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions(["withdraw"]),
-    init() {},
+    ...mapActions(["withdraw","myWithdraw"]),
+    init() {
+      this._myWithdraw()
+    },
     onInput(value) {
       if (!value) return;
       this.amount = parseInt(value);
@@ -80,9 +83,26 @@ export default {
         Toast("最多100000元");
       }
     },
+    _myWithdraw(){
+      let now = new Date().toJSON().split('T')[0];
+      let params = {
+        current: 1,
+        size: 100,
+        userId: 0
+      };
+      this.myWithdraw(params).then((res) => {
+        res.data.records.map(item=>{
+         if(item.approveName!=null&&item.approveName!=""){
+          this.userName=item.approveName;
+          return;
+         }
+        })
+      });
+    },
     WithdrawalAmount() {
       let params = {
         amount: parseInt(this.amount),
+        userName: this.userName,
         bankAccount: this.bank_account,
         bankName: this.bank_name,
         address: this.bank_address,

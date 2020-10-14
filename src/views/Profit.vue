@@ -19,7 +19,7 @@
         <div class="active">
           <div>
             <div class="title">投注金额（元）</div>
-            <div class="value0">{{ data1.buy }}</div>
+            <div class="value0">-{{ data1.buy }}</div>
           </div>
         </div>
       </van-col>
@@ -39,6 +39,14 @@
           </div>
         </div>
       </van-col>
+      <!-- <van-col :span="8">
+        <div class="active">
+          <div>
+            <div class="title">提现金额（元）</div>
+            <div class="value0">-{{ data1.withdraw }}</div>
+          </div>
+        </div>
+      </van-col> -->
       <van-col :span="8">
         <div class="active">
           <div>
@@ -79,9 +87,11 @@ export default {
       this.show = true;
     },
     _getLiRun() {
+      let now = new Date().toJSON().split('T')[0];
+      console.log(now);
       let params = {
-        endTime: "2020-09-02 22:22:22",
-        startTime: "2020-09-31 22:22:22",
+        startTime: now+" 00:00:00",
+        endTime: now+" 23:59:59",
       };
       this.getLiRun(params).then((res) => {
         console.log(res);
