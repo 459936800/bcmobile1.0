@@ -46,7 +46,11 @@ const api = {
 	// 获取昨日高手榜
 
 	// GET
-	getBankCardList: '/home/getBankCardList'
+	getBankCardList: '/home/getBankCardList',
 	// 获取商家银行卡
+
+	// GET
+	getContactList: '/home/getContactList',
+	//获取客服列表
 };
 export default api;

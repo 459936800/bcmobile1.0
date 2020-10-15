@@ -49,67 +49,72 @@ const mutations = {
 	}
 };
 const actions = {
-	captchaImage({}, param) {
+	captchaImage({ }, param) {
 		return ajax.$get(api.captchaImage);
 	},
-	getInfo({}, param) {
+	getInfo({ }, param) {
 		return ajax.$get(api.getInfo, {
 			params: param
 		});
 	},
-	login({}, param, option) {
+	login({ }, param, option) {
 		return ajax.$post(api.login, param, option);
 	},
 
-	addBetting({}, param, option) {
+	addBetting({ }, param, option) {
 		return ajax.$post(api.addBetting, param, option);
 	},
-	addUser({}, param, option) {
+	addUser({ }, param, option) {
 		return ajax.$post(api.addUser, param, option);
 	},
-	addUser1({}, param, option) {
+	addUser1({ }, param, option) {
 		return ajax.$post(api.addUser1, param, option);
 	},
-	getActivityList({}, param) {
+	getActivityList({ }, param) {
 		return ajax.$get(api.getActivityList, {
 			params: param
 		});
 	},
-	getActivityDetail({}, param) {
+	getActivityDetail({ }, param) {
 		return ajax.$get(api.getActivityList + '/' + param.id);
 	},
-	getAdvert({}, param) {
+	getAdvert({ }, param) {
 		return ajax.$get(api.getAdvert, {
 			params: param
 		});
 	},
-	getBanner({}, param) {
+	getBanner({ }, param) {
 		return ajax.$get(api.getBanner, {
 			params: param
 		});
 	},
-	getHotLottery({}, param) {
+	getHotLottery({ }, param) {
 		return ajax.$get(api.getHotLottery, {
 			params: param
 		});
 	},
-	getInformation({}, param) {
+	getInformation({ }, param) {
 		return ajax.$get(api.getInformation, {
 			params: param
 		});
 	},
-	getNewWinner({}, param) {
+	getNewWinner({ }, param) {
 		return ajax.$get(api.getNewWinner, {
 			params: param
 		});
 	},
-	getYesterdayWinner({}, param) {
+	getYesterdayWinner({ }, param) {
 		return ajax.$get(api.getYesterdayWinner, {
 			params: param
 		});
 	},
-	getBankCardList({}, param) {
+	getBankCardList({ }, param) {
 		return ajax.$get(api.getBankCardList, {
+			params: param
+		});
+	},
+	getContactList({ }, param) {
+		return ajax.$get(api.getContactList, {
 			params: param
 		});
 	}
