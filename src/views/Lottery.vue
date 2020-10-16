@@ -11,8 +11,9 @@
 					</van-col>
 					<van-col span="8">
 						<van-row>
+              <!-- {{user}} -->
 							<div class="balance">
-								<span>余额：{{ user.amount }}</span>
+								<span>余额：{{ userAmount}}</span>
 							</div>
 						</van-row>
 					</van-col>
@@ -276,6 +277,7 @@
 				Lotterytime: -1,
 				newTime: "日",
 				maxRatio: 0,
+        userAmount:0,
 				number: 0,
 				bettingNumber: 0,
 				playTypeNumber: 1,
@@ -306,7 +308,9 @@
 				}
 			};
 		},
-		created() {},
+		created() {
+				this.setLotteryShortName(this.$route.query.name.substr(0, 2));
+    },
 		mounted() {
 			this._refreshUserInfo();
 		},
@@ -329,9 +333,11 @@
 			_showLottery(n, o) {
 				this.showLottery = this._showLottery;
 			},
+      user(n,o){
+        this.userAmount=n.amount
+      },
 			Lotterytime(n, o) {}
 		},
-
 		methods: {
 			...mapMutations(["setUser", "setLotteryShortName", "setPlayTypeColumns"]),
 			...mapActions([
@@ -399,7 +405,9 @@
 						this.Lotterytime = 1000 * 61;
 					} else if (this.Lotterytime <= 0) {
 						this.Lotterytime = last_t.mss;
-					}
+					}else if(last_t.mss > 0){
+            this.Lotterytime = last_t.mss
+          }
 					// 30秒后开始要骰子
 					if (this.Lotterytime > 1000 * 30) {
 						this.isLastLottery = false;
@@ -412,7 +420,7 @@
 
 					console.log('时间：'+this.Lotterytime);
 					console.log('开奖时间：'+this.lotteryDetall.lastAwards.lotteryTime);
-					console.log('当期时间'+this.lotteryDetall.systemTime);
+					console.log('当期时间:'+this.lotteryDetall.systemTime);
 					console.log('期号：'+this.lotteryDetall.lastAwards.lotteryNumber);
 					// console.log(this.lotteryDetall.newLottery.lotteryTime);
 					// this.isLastLottery = false;
@@ -535,29 +543,6 @@
 					});
 				});
 			},
-			// _addBetting() {
-			// 	let now = new Date().toJSON();
-			// 	let playTypeCode = "";
-			// 	this.bettingList.obj.map(item => {
-			// 		if (item.price == this.maxRatio) playTypeCode = item.code;
-			// 	});
-			// 	console.log(now);
-			// 	let params = {
-			// 		awardNumber: this.lotteryDetall.newLottery.lotteryNumber,
-			// 		bettingAmount: this.number,
-			// 		bettingNumber: this.bettingNumber,
-			// 		bettingTime: now,
-			// 		bettingValue: this.bettingList.name.join(","),
-			// 		// lotteryCode: this.LotteryCode,
-			// 		lotteryCode: "ahks",
-			// 		lotteryNumber: this.lotteryDetall.newLottery.lotteryNumber,
-			// 		lotteryWay: this.playTypeArr[this.playTypeNum].lotteryCode
-			// 	};
-
-			// 	this.addBetting(params).then(res => {
-			// 		console.log(res);
-			// 	});
-			// },
 			_getPlayTypeDetailByCode() {
 				let arr = [];
 				this.playTypeArr = [];
@@ -625,7 +610,7 @@
 						});
 						item.arr = arr;
 						item.sum = sum;
-						sum > 9 ? (item.size = "大") : (item.size = "小");
+						sum > 11 ? (item.size = "大") : (item.size = "小");
 						sum % 2 == 0 ? (item.ds = "双") : (item.ds = "单");
 					});
 					this.RecordsList = res.data.records;

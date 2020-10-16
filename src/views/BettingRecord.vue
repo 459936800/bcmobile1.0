@@ -36,7 +36,7 @@
 						return null;
 						break;
 					case "等待开奖":
-						return "CALING";
+						return "PROCESS";
 						break;
 					case "已中奖":
 						return "WIN";
@@ -69,7 +69,7 @@
             {name:'期号',key:'awardNumber'},
             {name:'彩票号码',key:'lotteryCodeName'},
             {name:'玩法',key:'playTypeName'},
-            {name:'投注',key:'bettingValue'},
+            {name:'投注',key:'lotteryWayName'},
             {name:'注数',key:'bettingNumber'},
             {name:'每注金额',key:'bettingPrice'},
             {name:'投注时间',key:'bettingTime'},
@@ -103,9 +103,9 @@
 					// 全部则status不传，已中奖status：WIN，
 					// 未中奖：UNWIN，等待开奖：CALING
 					case "":
-						return "未中奖";
+						return "空";
 						break;
-					case "CALING":
+					case "PROCESS":
 						return "等待开奖";
 						break;
 					case "WIN":
@@ -115,7 +115,7 @@
 						return "未中奖";
 						break;
 					default:
-						return "未中奖";
+						return name;
 						break;
 				}
 			},
@@ -163,7 +163,7 @@
             this.table1.tableBody.map(item => {
 							if (item.status == "WIN") {
 								item.bgcolor = "red";
-							} else {
+							} else if(item.status == "UNWIN") {
 								item.bgcolor = "grey";
 							}
               item.status = this._getStatus(item.status)

@@ -64,14 +64,19 @@
 				name="邮箱地址"
 				label="邮箱地址"
 				placeholder="邮箱地址"
-				:rules="[{ required: true, message: '请填写邮箱地址' }]"
+				:rules="[{ required: true, message: '请填写邮箱地址' },
+        {pattern : /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/ , message: '邮箱地址格式有误！'}
+        ]"
 			/>
 			<van-field
 				v-model="phonenumber"
 				name="手机号码"
 				label="手机号码"
 				placeholder="手机号码"
-				:rules="[{ required: true, message: '请填写手机号码' }]"
+				:rules="[
+        { required: true, message: '请填写手机号码！' },
+        {pattern :/^1[3456789]\d{9}$/, message: '手机格式有误！'}
+        ]"
 			/>
 			<div style="margin: 16px">
 				<van-button type="danger" round block native-type="submit">免费注册</van-button>

@@ -6,8 +6,8 @@
 				name="真实姓名"
 				label="真实姓名"
 				placeholder="真实姓名"
-				:rules="[{ required: true, message: '请填写真实姓名' }]"
-				:disabled="userName.length > 0"
+				:rules="[{ required: false, message: '请填写真实姓名' }]"
+				:disabled="Disabled"
 			/>
 			<van-field
 				v-model="bank_account"
@@ -65,6 +65,7 @@
 				bank_address: "",
 				amount: 0,
 				isshowfield: false,
+        Disabled:false,
 			};
 		},
 		mounted() {
@@ -91,8 +92,10 @@
 					userId: 0,
 				};
 				this.myWithdraw(params).then((res) => {
-					if (res.data.records.length > 0)
+					if (res.data.records.length > 0){
 						this.userName = res.data.records[0].approveName;
+            this.Disabled=true
+          }
 				});
 			},
 			WithdrawalAmount() {
@@ -104,7 +107,6 @@
 					address: this.bank_address,
 					type: "银行卡",
 				};
-
 				this.withdraw(params).then((res) => {
 					console.log(res);
 					Toast(res.msg);

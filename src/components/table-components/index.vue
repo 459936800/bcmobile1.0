@@ -1,7 +1,7 @@
 <template>
   <div class="list-table">
     <table class="openPast" cellspacing="0" cellpadding="0">
-      <tr>
+      <tr >
         <td
         v-for="(item,idx) in tableHeader" :key="'header-'+idx"
         >{{item.name}}</td>
