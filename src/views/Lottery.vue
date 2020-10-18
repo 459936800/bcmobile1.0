@@ -11,18 +11,22 @@
 					</van-col>
 					<van-col span="8">
 						<van-row>
-              <!-- {{user}} -->
+							<!-- {{user}} -->
 							<div class="balance">
-								<span>余额：{{ userAmount}}</span>
+								<span>余额：{{ userAmount }}</span>
 							</div>
 						</van-row>
 					</van-col>
 				</van-row>
 				<van-row class="LotteryNumber" style="padding-top: 1em">
-					<van-col @click="showDialog=true" span="12">
+					<van-col @click="showDialog = true" span="12">
 						<!-- v-if="isLastLottery" -->
-						<span v-if="isLastLottery">{{ lotteryDetall.lastAwards.lotteryNumber }}期开奖号码</span>
-						<span v-else>{{ lotteryDetall.newLottery.lotteryNumber }}期开奖号码</span>
+						<span v-if="isLastLottery"
+							>{{ lotteryDetall.lastAwards.lotteryNumber }}期开奖号码</span
+						>
+						<span v-else
+							>{{ lotteryDetall.newLottery.lotteryNumber }}期开奖号码</span
+						>
 						<div>
 							<div v-show="!isLastLottery">
 								<i :class="'Dice Dice' + DiceNum[0]"></i>
@@ -38,7 +42,9 @@
 					</van-col>
 					<van-col span="12">
 						<!-- v-if="isLastLottery" -->
-						<span>第{{ lotteryDetall.lastAwards.lotteryNumber }}开奖倒计时</span>
+						<span
+							>第{{ lotteryDetall.lastAwards.lotteryNumber }}开奖倒计时</span
+						>
 						<!-- <span>第{{ lotteryDetall.newLottery.lotteryNumber }}</span> -->
 						<van-count-down :time="Lotterytime" />
 					</van-col>
@@ -90,7 +96,8 @@
 							<td style="width: 1em; text-align: left">
 								<div>
 									最高可中
-									<span>{{ numFilter(number * maxRatio, 0) }}</span>元
+									<span>{{ numFilter(number * maxRatio, 0) }}</span
+									>元
 								</div>
 							</td>
 						</tr>
@@ -103,18 +110,16 @@
 					<p class="fl">
 						<i style="color: rgb(255, 163, 25)">
 							{{
-							_playtype == "三不同号"
-							? bettingNumber == 0
-							? 0
-							: 1
-							: bettingNumber
-							}}
-						</i>注，
+								_playtype == "三不同号"
+									? bettingNumber == 0
+										? 0
+										: 1
+									: bettingNumber
+							}} </i
+						>注，
 						<i style="color: rgb(255, 163, 25)">
-							{{
-							numFilter(number * bettingNumber * playTypeNumber, 0)
-							}}
-						</i>元
+							{{ numFilter(number * bettingNumber * playTypeNumber, 0) }} </i
+						>元
 					</p>
 					<div @click="_buyLottery" class="f0">确认投注</div>
 				</div>
@@ -130,11 +135,14 @@
 			>
 				<p style="margin-bottom: 10px">{{ Lotterys.title }}</p>
 				<van-row class="moreLottery1">
-					<van-col span="8" @click="goToLottery(item)" v-for="item of Lotterys.list" :key="item.id">
+					<van-col
+						span="8"
+						@click="goToLottery(item)"
+						v-for="item of Lotterys.list"
+						:key="item.id"
+					>
 						<span :class="{ active: LotteryCode == item.code }">
-							{{
-							item.name
-							}}
+							{{ item.name }}
 						</span>
 					</van-col>
 				</van-row>
@@ -163,15 +171,15 @@
 					<td>形态</td>
 				</tr>
 				<tr v-for="item in RecordsList" :key="item.id">
-					<td>{{item.lotteryNumber}}</td>
+					<td>{{ item.lotteryNumber }}</td>
 					<td>
 						<i :class="'Dice Dice' + item.arr[0]"></i>
 						<i :class="'Dice Dice' + item.arr[1]"></i>
 						<i :class="'Dice Dice' + item.arr[2]"></i>
 					</td>
-					<td>{{item.sum}}</td>
-					<td>{{item.size}}</td>
-					<td>{{item.ds}}</td>
+					<td>{{ item.sum }}</td>
+					<td>{{ item.size }}</td>
+					<td>{{ item.ds }}</td>
 				</tr>
 			</table>
 		</van-dialog>
@@ -189,7 +197,7 @@
 			...mapGetters({
 				_playtype: "getPlaytype",
 				_showLottery: "getShowLottery",
-				user: "getUser"
+				user: "getUser",
 			}),
 			playTypeNum() {
 				switch (this._playtype) {
@@ -227,7 +235,7 @@
 				if (this.playTypeArr[this.playTypeNum].name.indexOf("通选") != -1)
 					return 1;
 				return 0;
-			}
+			},
 		},
 		data() {
 			return {
@@ -247,7 +255,7 @@
 								code: "xyks",
 								name: "幸运快3",
 								pic: 0,
-								tip: "15分钟1期"
+								tip: "15分钟1期",
 							},
 							{
 								id: 1,
@@ -255,7 +263,7 @@
 								code: "gdks",
 								name: "广东快3",
 								pic: 0,
-								tip: "15分钟1期"
+								tip: "15分钟1期",
 							},
 							{
 								id: 2,
@@ -263,21 +271,21 @@
 								code: "njks",
 								name: "南京快3",
 								pic: 0,
-								tip: "15分钟1期"
-							}
-						]
-					}
+								tip: "15分钟1期",
+							},
+						],
+					},
 				],
 				bettingList: {
 					name: [],
 					price: [],
-					obj: []
+					obj: [],
 				}, //玩法数组
 				SumBettingList: [],
 				Lotterytime: -1,
 				newTime: "日",
 				maxRatio: 0,
-        userAmount:0,
+				userAmount: 0,
 				number: 0,
 				bettingNumber: 0,
 				playTypeNumber: 1,
@@ -297,20 +305,20 @@
 						lotteryCode: "ahks",
 						lotteryNumber: "000000000",
 						lotteryTime: 0,
-						lotteryValue: "1,3,4"
+						lotteryValue: "1,3,4",
 					},
 					newLottery: {
 						createTime: 0,
 						id: 652,
 						lotteryCode: "ahks",
-						lotteryNumber: "000000000"
-					}
-				}
+						lotteryNumber: "000000000",
+					},
+				},
 			};
 		},
 		created() {
-				this.setLotteryShortName(this.$route.query.name.substr(0, 2));
-    },
+			this.setLotteryShortName(this.$route.query.name.substr(0, 2));
+		},
 		mounted() {
 			this._refreshUserInfo();
 		},
@@ -333,10 +341,10 @@
 			_showLottery(n, o) {
 				this.showLottery = this._showLottery;
 			},
-      user(n,o){
-        this.userAmount=n.amount
-      },
-			Lotterytime(n, o) {}
+			user(n, o) {
+				this.userAmount = n.amount;
+			},
+			Lotterytime(n, o) {},
 		},
 		methods: {
 			...mapMutations(["setUser", "setLotteryShortName", "setPlayTypeColumns"]),
@@ -349,7 +357,7 @@
 				"getAwardsHistory",
 				"getLast5Awards",
 				"addBetting",
-				"buyLottery"
+				"buyLottery",
 			]),
 
 			init() {
@@ -372,7 +380,7 @@
 				this.initWebSocket(this.user.userName);
 			},
 			_refreshUserInfo() {
-				this.refreshUserInfo().then(res => {
+				this.refreshUserInfo().then((res) => {
 					if (res.code != "200") return;
 					const user = res.data;
 					this.$comFun.cookie.setCookie("user", user);
@@ -400,14 +408,14 @@
 					this.newTime = this.lotteryDetall;
 					// 计算如果最新数据还没,前端续一分钟
 					if (last_t.mss <= 0 && this.Lotterytime <= 0) {
-            Toast("开奖时间异常！=>"+this.lotteryDetall.lastAwards.lotteryTime)
+						Toast("开奖时间异常！=>" + this.lotteryDetall.lastAwards.lotteryTime);
 						this.isLastLottery = true;
 						this.Lotterytime = 1000 * 61;
 					} else if (this.Lotterytime <= 0) {
-						this.Lotterytime = last_t.mss;
-					}else if(last_t.mss > 0){
-            this.Lotterytime = last_t.mss
-          }
+						this.Lotterytime = last_t.mss - 60000;
+					} else if (last_t.mss > 0) {
+						this.Lotterytime = last_t.mss - 60000;
+					}
 					// 30秒后开始要骰子
 					if (this.Lotterytime > 1000 * 30) {
 						this.isLastLottery = false;
@@ -418,10 +426,10 @@
 
 					this.Lotterytime = this.Lotterytime - 1000;
 
-					console.log('时间：'+this.Lotterytime);
-					console.log('开奖时间：'+this.lotteryDetall.lastAwards.lotteryTime);
-					console.log('当期时间:'+this.lotteryDetall.systemTime);
-					console.log('期号：'+this.lotteryDetall.lastAwards.lotteryNumber);
+					console.log("时间：" + this.Lotterytime);
+					console.log("开奖时间：" + this.lotteryDetall.lastAwards.lotteryTime);
+					console.log("当期时间:" + this.lotteryDetall.systemTime);
+					console.log("期号：" + this.lotteryDetall.lastAwards.lotteryNumber);
 					// console.log(this.lotteryDetall.newLottery.lotteryTime);
 					// this.isLastLottery = false;
 					// this.Lotterytime = last_t.mss;
@@ -444,20 +452,20 @@
 				this.LotteryShortName = item.name.substr(0, 2);
 				this.$router.push({
 					path: "Lottery",
-					query: { type: item.type, code: item.code, name: item.name }
+					query: { type: item.type, code: item.code, name: item.name },
 				});
 				location.reload();
 			},
 			goToBettingRecord(e) {
 				if (e != 1) return;
 				this.$router.push({
-					path: "BettingRecord"
+					path: "BettingRecord",
 				});
 			},
 			PlayTypeFilter() {
 				let obj = {
 					state: false,
-					msg: "不通过"
+					msg: "不通过",
 				};
 				switch (this._playtype) {
 					case "三不同号":
@@ -489,7 +497,7 @@
 					return;
 				}
 				this.overlayShow = true;
-				this.bettingList.obj.map(item => {
+				this.bettingList.obj.map((item) => {
 					if (this._playtype == "三不同号") {
 						numArr.push(parseInt(item.code));
 					} else {
@@ -503,7 +511,7 @@
 							lotteryNumber: this.lotteryDetall.lastAwards.lotteryNumber,
 							lotteryWay: this.playTypeArr[this.playTypeNum].lotteryCode,
 							playType: this.playTypeArr[this.playTypeNum].code,
-							playTypeCode: item.code
+							playTypeCode: item.code,
 						};
 						params.push(param);
 					}
@@ -524,17 +532,17 @@
 						lotteryNumber: this.lotteryDetall.lastAwards.lotteryNumber,
 						lotteryWay: this.playTypeArr[this.playTypeNum].lotteryCode,
 						playType: this.playTypeArr[this.playTypeNum].code,
-						playTypeCode: this.bettingList.obj[0].code
+						playTypeCode: this.bettingList.obj[0].code,
 					};
 					params.push(param);
 				}
 				console.log(params);
-				this.buyLottery(params).then(res => {
+				this.buyLottery(params).then((res) => {
 					this.overlayShow = false;
 					if (res.code != "200") return;
 					Toast("投注成功！");
 					// console.log(res);
-					this.refreshUserInfo().then(res => {
+					this.refreshUserInfo().then((res) => {
 						console.log(res);
 						if (res.code != "200") return;
 						const user = res.data;
@@ -547,9 +555,9 @@
 				let arr = [];
 				this.playTypeArr = [];
 				this.getPlayTypeDetailByCode({
-					code: this.LotteryType
-				}).then(res => {
-					res.data.map(item => {
+					code: this.LotteryType,
+				}).then((res) => {
+					res.data.map((item) => {
 						if (item.name.indexOf("二") != -1) return;
 						arr.push(item.name);
 						item.playTypeList.map((item0, index) => {
@@ -565,14 +573,14 @@
 					{ tltle: "快三", type: "ks" },
 					{ tltle: "时时彩", type: "ssc" },
 					{ tltle: "pk10", type: "pks" },
-					{ tltle: "11选5", type: "syxw" }
+					{ tltle: "11选5", type: "syxw" },
 				];
 				let i = this.AllLotterys.length;
 				if (i != typeArr.length) {
 					let params = {
-						type: typeArr[i].type
+						type: typeArr[i].type,
 					};
-					this.getLotterys(params).then(res => {
+					this.getLotterys(params).then((res) => {
 						// console.log(res.rows);
 						let obj = {};
 						obj.id = i;
@@ -585,27 +593,27 @@
 			},
 			_getLast5Awards() {
 				let params = {
-					code: "ahks"
+					code: "ahks",
 				};
-				this.getLast5Awards(params).then(res => {
+				this.getLast5Awards(params).then((res) => {
 					console.log(res);
 				});
 			},
 			_getAwardsHistory() {
 				let params = {
 					code: this.LotteryCode,
-					num: 10
+					num: 10,
 				};
-				this.getAwardsHistory(params).then(res => {
+				this.getAwardsHistory(params).then((res) => {
 					res.data.records.shift();
-					res.data.records.map(item => {
+					res.data.records.map((item) => {
 						let arr = [];
 						let sum = 0;
 						if (!item.lotteryValue) {
 							item.lotteryValue = "6,6,6";
 						}
 						arr = item.lotteryValue.split(",");
-						arr.map(num => {
+						arr.map((num) => {
 							sum = sum + parseInt(num);
 						});
 						item.arr = arr;
@@ -618,13 +626,13 @@
 			},
 
 			Refresh() {
-				this.$refs.check_btn.map(item => {
+				this.$refs.check_btn.map((item) => {
 					item.classList.remove("checked");
 				});
 				this.bettingList = {
 					name: [],
 					price: [],
-					obj: []
+					obj: [],
 				};
 				this.bettingNumber = 0;
 				this.playTypeNumber = 1;
@@ -665,7 +673,7 @@
 				let t;
 				let _this = this;
 				clearTimeout(t);
-				t = setTimeout(function() {
+				t = setTimeout(function () {
 					let num =
 						parseInt(e.classList.value.substring(e.classList.value.length - 1)) +
 						1;
@@ -764,8 +772,8 @@
 			websocketclose(e) {
 				//关闭
 				console.log("断开连接", e);
-			}
-		}
+			},
+		},
 	};
 </script>
 <style lang="less">

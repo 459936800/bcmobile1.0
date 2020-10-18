@@ -12,7 +12,7 @@ var instance = axios.create({
 });
 // 请求拦截器
 instance.interceptors.request.use(
-	function(config) {
+	function (config) {
 		console.log('api:' + config.url);
 
 		// let noTokenArr = [
@@ -38,13 +38,13 @@ instance.interceptors.request.use(
 		}
 		return config;
 	},
-	function(error) {
+	function (error) {
 		return Promise.reject(error);
 	}
 );
 
 instance.interceptors.response.use(
-	function(res) {
+	function (res) {
 		if (res.data.code != 200 && $router.app._route.name != '首页') {
 			console.log(res.data.msg);
 			console.log($router.app._route.name);
@@ -55,7 +55,7 @@ instance.interceptors.response.use(
 				comFun.cookie.clearCookie('user');
 				store.commit('setToken', null);
 				setTimeout(() => {
-					window.location.href = 'http://' + window.location.host;
+					window.location.href = 'https://' + window.location.host;
 				}, 3000);
 			} else {
 				Toast(res.data.msg);
@@ -73,7 +73,7 @@ instance.interceptors.response.use(
 		}
 		return res.data;
 	},
-	function(error) {
+	function (error) {
 		if (error.response) {
 			// 请求已发送，服务器回复状态码在2xx之外
 			console.error(error.response);
@@ -94,13 +94,13 @@ instance.interceptors.response.use(
 		return Promise.reject(error);
 	}
 );
-const $get = function(obj, param) {
+const $get = function (obj, param) {
 	// if ($conf.isPcTest) {
 	return instance.get(obj, param);
 	// }
 };
 
-const $post = function(obj, param, option) {
+const $post = function (obj, param, option) {
 	return instance.post(obj, param, option);
 };
 
