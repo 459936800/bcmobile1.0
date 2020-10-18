@@ -64,9 +64,13 @@
 				name="邮箱地址"
 				label="邮箱地址"
 				placeholder="邮箱地址"
-				:rules="[{ required: true, message: '请填写邮箱地址' },
-        {pattern : /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/ , message: '邮箱地址格式有误！'}
-        ]"
+				:rules="[
+					{ required: true, message: '请填写邮箱地址' },
+					{
+						pattern: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
+						message: '邮箱地址格式有误！',
+					},
+				]"
 			/>
 			<van-field
 				v-model="phonenumber"
@@ -74,23 +78,30 @@
 				label="手机号码"
 				placeholder="手机号码"
 				:rules="[
-        { required: true, message: '请填写手机号码！' },
-        {pattern :/^1[3456789]\d{9}$/, message: '手机格式有误！'}
-        ]"
+					{ required: true, message: '请填写手机号码！' },
+					{ pattern: /^1[3456789]\d{9}$/, message: '手机格式有误！' },
+				]"
 			/>
 			<div style="margin: 16px">
-				<van-button type="danger" round block native-type="submit">免费注册</van-button>
+				<van-button type="danger" round block native-type="submit"
+					>免费注册</van-button
+				>
 			</div>
 		</van-form>
 		<van-dialog v-model="dialogShow" title="头像选择">
 			<van-row class="content">
-				<van-col v-for="(item, index) of images" :span="6" :key="index" :index="index">
+				<van-col
+					v-for="(item, index) of images"
+					:span="6"
+					:key="index"
+					:index="index"
+				>
 					<van-image
 						@click="avatar = images[index]"
 						round
 						width="4rem"
 						height="4rem"
-						:src="'http://wycc168.com/prod-api' + item"
+						:src="'https://wycc168.com/prod-api' + item"
 					/>
 				</van-col>
 				<van-col :span="6">
@@ -135,7 +146,7 @@
 				userName: "",
 				code: "",
 				uuid: "更多  ",
-				images: []
+				images: [],
 			};
 		},
 		mounted() {
@@ -151,7 +162,7 @@
 				// 此时可以自行将文件上传至服务器
 				const formData = new FormData(); // 声明一个FormData对象
 				formData.append("file", file.file, file.file.name);
-				this.upload(formData).then(res => {
+				this.upload(formData).then((res) => {
 					console.log(res);
 					if (res.code == 200) {
 						this.images.push(res.imgUrl);
@@ -170,14 +181,14 @@
 					invite: this.invite,
 					email: this.email,
 					sex: this.sex,
-					phonenumber: this.phonenumber
+					phonenumber: this.phonenumber,
 				};
-				this.addUser(params).then(res => {
+				this.addUser(params).then((res) => {
 					if (res.code == "200") {
 						Toast("注册成功");
 						setTimeout(() => {
 							this.$router.push({
-								path: "/Login"
+								path: "/Login",
 							});
 						}, 2000);
 					} else {
@@ -185,8 +196,8 @@
 					}
 					this.loadingShow = false;
 				});
-			}
-		}
+			},
+		},
 	};
 </script>
 <style lang="less">

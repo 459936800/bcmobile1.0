@@ -11,7 +11,13 @@
 						height="4rem"
 						:src="require('../assets/image/' + user.avatar)"
 					/>
-					<van-image v-else round width="4rem" height="4rem" :src="require('../assets/image/u2.jpeg')" />
+					<van-image
+						v-else
+						round
+						width="4rem"
+						height="4rem"
+						:src="require('../assets/image/u2.jpeg')"
+					/>
 				</a>
 				<div class="useInof">
 					<div>{{ user.nickName }}</div>
@@ -112,13 +118,13 @@
 		name: "My",
 		components: {},
 		computed: {
-			...mapGetters({ user: "getUser" })
+			...mapGetters({ user: "getUser" }),
 		},
 		data() {
 			return {
 				activeName: "彩票",
 				pics: ["u1.png", "u2.jpeg"],
-				avatar: "u1.png"
+				avatar: "u1.png",
 			};
 		},
 		// beforeCreate() {},
@@ -130,7 +136,7 @@
 			...mapMutations(["setToken", "setUser"]),
 			...mapActions(["getInfo", "refreshUserInfo"]),
 			init() {
-				this.refreshUserInfo().then(res => {
+				this.refreshUserInfo().then((res) => {
 					if (res.code != "200") return;
 					const user = res.data;
 					this.$comFun.cookie.setCookie("user", user);
@@ -142,7 +148,7 @@
 				//   path: "PersonalInfo",
 				// });
 				this.$router.push({
-					path: "Login"
+					path: "Login",
 				});
 			},
 			logout() {
@@ -150,13 +156,13 @@
 				this.$comFun.cookie.clearCookie("user");
 				this.setToken(null);
 				this.setUser(null);
-				window.location.href = "http://" + window.location.host + "/";
+				window.location.href = "https://" + window.location.host + "/";
 				// location.reload();
 				// this.$router.push({
 				//   path: "index"
 				// });
-			}
-		}
+			},
+		},
 	};
 </script>
 <style lang="less">

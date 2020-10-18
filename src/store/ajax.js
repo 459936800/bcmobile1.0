@@ -62,7 +62,7 @@ instance.interceptors.response.use(
 			}
 			// comFun.cookie.clearCookie('Admin-Tokens');
 			// setTimeout(() => {
-			// 	// window.location.href = 'http://' + window.location.host + '/login';
+			// 	// window.location.href = 'https://' + window.location.host + '/login';
 			// }, 3000);
 		} else {
 			if (res.data.user) {
