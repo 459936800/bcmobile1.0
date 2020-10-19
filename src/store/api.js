@@ -13,6 +13,7 @@ const api = {
 	// POST
 	addUser: '/home/addUser',
 	// 用户注册
+
 	// POST
 	addUser1: '/system/user',
 	// 用户注册
@@ -52,5 +53,13 @@ const api = {
 	// GET
 	getContactList: '/home/getContactList',
 	//获取客服列表
+
+	// POST
+	remember: '/home/remember',
+	//根据用户账号/手机号/邮箱号获取安全问题
+
+	// POST
+	resetPassword: '/home/resetPassword'
+	//回答安全问题
 };
 export default api;

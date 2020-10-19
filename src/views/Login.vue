@@ -30,6 +30,13 @@
           >立即登录</van-button
         >
       </div>
+      <div style="margin: 16px">
+        <router-link  :to="{ name: '找回密码' }">
+          <van-button type="default" round block native-type="submit"
+            >忘记密码？</van-button
+          >
+        </router-link>
+      </div>
     </van-form>
     <div style="margin: 16px">
       <van-button @click="toLogon" type="default" round block

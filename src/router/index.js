@@ -1,5 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
+import setting from './setting/index.js';
+
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
 import Logon from '../views/Logon.vue';
@@ -17,11 +20,9 @@ import OverviewHistory from '../views/OverviewHistory.vue';
 import Profit from '../views/Profit.vue';
 import WithdrawalHistory from '../views/WithdrawalHistory.vue';
 
-WithdrawalHistory;
-
 Vue.use(VueRouter);
 
-const routes = [
+let routes = [
 	{
 		path: '/',
 		name: '首页',
@@ -109,7 +110,8 @@ const routes = [
 		component: WithdrawalHistory
 	}
 ];
-
+// routes = routes.concat(setting);
+routes = routes.concat(setting);
 const router = new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,

@@ -317,9 +317,11 @@
 			};
 		},
 		created() {
+      this.init();
 			this.setLotteryShortName(this.$route.query.name.substr(0, 2));
 		},
 		mounted() {
+      this.init();
 			this._refreshUserInfo();
 		},
 		destroyed() {
@@ -385,7 +387,6 @@
 					const user = res.data;
 					this.$comFun.cookie.setCookie("user", user);
 					this.setUser(res.data);
-					this.init();
 				});
 			},
 			//设置快三期号与中奖号码
@@ -539,16 +540,10 @@
 				console.log(params);
 				this.buyLottery(params).then((res) => {
 					this.overlayShow = false;
+          this._refreshUserInfo()
 					if (res.code != "200") return;
 					Toast("投注成功！");
 					// console.log(res);
-					this.refreshUserInfo().then((res) => {
-						console.log(res);
-						if (res.code != "200") return;
-						const user = res.data;
-						this.$comFun.cookie.setCookie("user", user);
-						this.setUser(res.data);
-					});
 				});
 			},
 			_getPlayTypeDetailByCode() {
