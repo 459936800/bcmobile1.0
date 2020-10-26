@@ -317,11 +317,10 @@
 			};
 		},
 		created() {
-      this.init();
+      // this.init();
 			this.setLotteryShortName(this.$route.query.name.substr(0, 2));
 		},
 		mounted() {
-      this.init();
 			this._refreshUserInfo();
 		},
 		destroyed() {
@@ -387,6 +386,11 @@
 					const user = res.data;
 					this.$comFun.cookie.setCookie("user", user);
 					this.setUser(res.data);
+          if(this.user){
+            this.init();
+          }else{
+            this._refreshUserInfo()
+          }
 				});
 			},
 			//设置快三期号与中奖号码

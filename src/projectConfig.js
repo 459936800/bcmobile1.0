@@ -20,8 +20,8 @@ var exportsFun = {
 	get wsUrl() {
 		// var test = 'https://wycc168.com/prod-api/',
 		// 	prod = 'https://wycc168.com/prod-api/';
-		var test = 'ws://10.8.1.100:8088/',
-			prod = 'ws://wycc168.com/prod-api/';
+		var test = 'wss://10.8.1.100:8088/',
+			prod = 'wss://wycc168.com/prod-api/';
 		return this.isTest ? test : prod;
 	},
 	// 添加接口发布版本信息
