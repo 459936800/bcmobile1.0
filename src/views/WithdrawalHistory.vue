@@ -151,7 +151,9 @@
 					if (res.data && res.data.records.length > 0) {
             this.table1.tableBody=this.table1.tableBody.concat(res.data.records)
             this.table1.tableBody.map(item => {
-                item.type = this.getType(item.type)
+              let date = new Date(item.time)
+              item.timeStr=date.toLocaleString()+""
+              item.type = this.getType(item.type)
             });
             this.page++;
 					} else {

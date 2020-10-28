@@ -19,7 +19,7 @@
 					</van-col>
 				</van-row>
 				<van-row class="LotteryNumber" style="padding-top: 1em">
-					<van-col @click="showDialog = true" span="12">
+					<van-col @click="_getAwardsHistory()" span="12">
 						<!-- v-if="isLastLottery" -->
 						<span v-if="isLastLottery"
 							>{{ lotteryDetall.lastAwards.lotteryNumber }}期开奖号码</span
@@ -243,7 +243,9 @@
 				overlayShow: false,
 				showDialog: false,
 				isActive: 0,
+        // 骰子列表
 				RecordsList: [],
+        // 票种列表
 				AllLotterys: [
 					{
 						id: 0,
@@ -276,17 +278,21 @@
 						],
 					},
 				],
+        //玩法数组
 				bettingList: {
 					name: [],
 					price: [],
 					obj: [],
-				}, //玩法数组
+				}, 
 				SumBettingList: [],
 				Lotterytime: -1,
 				newTime: "日",
 				maxRatio: 0,
+        // 用户金额
 				userAmount: 0,
+        // 输入金额
 				number: 0,
+        // 注数
 				bettingNumber: 0,
 				playTypeNumber: 1,
 				LotteryCode: -1,
@@ -317,11 +323,10 @@
 			};
 		},
 		created() {
-      // this.init();
 			this.setLotteryShortName(this.$route.query.name.substr(0, 2));
 		},
 		mounted() {
-			this._refreshUserInfo();
+			this.init();
 		},
 		destroyed() {
 			console.log("destroyed");
@@ -362,19 +367,24 @@
 			]),
 
 			init() {
-				let _this = this;
-				this.AllLotterys = [];
-				this.LotteryCode = this.$route.query.code;
-				this.LotteryType = this.$route.query.type;
-				this.$root.Bus.$off("Lottery_Refresh");
-				this.$root.Bus.$on("Lottery_Refresh", () => {
-					_this.Refresh();
+        this.refreshUserInfo().then((res) => {
+					if (res.code != "200") return;
+					const user = res.data;
+					this.$comFun.cookie.setCookie("user", user);
+					this.setUser(res.data);
+	        let _this = this;
+          this.LotteryCode = this.$route.query.code;
+          this.LotteryType = this.$route.query.type;
+          this.$root.Bus.$off("Lottery_Refresh");
+          this.$root.Bus.$on("Lottery_Refresh", () => {
+            _this.Refresh();
+          });
+          // this._getLast5Awards();
+          this.getNewLotterys();
+          this.ThreeDiceAnimation();
+          this._getPlayTypeDetailByCode();
+          this._getLotterys();
 				});
-				// this._getLast5Awards();
-				this.getNewLotterys();
-				this.ThreeDiceAnimation();
-				this._getPlayTypeDetailByCode();
-				this._getLotterys();
 			},
 			getNewLotterys() {
 				//初始化weosocket
@@ -386,11 +396,6 @@
 					const user = res.data;
 					this.$comFun.cookie.setCookie("user", user);
 					this.setUser(res.data);
-          if(this.user){
-            this.init();
-          }else{
-            this._refreshUserInfo()
-          }
 				});
 			},
 			//设置快三期号与中奖号码
@@ -431,6 +436,7 @@
 
 					this.Lotterytime = this.Lotterytime - 1000;
 
+					console.log(this.lotteryDetall);
 					console.log("时间：" + this.Lotterytime);
 					console.log("开奖时间：" + this.lotteryDetall.lastAwards.lotteryTime);
 					console.log("当期时间:" + this.lotteryDetall.systemTime);
@@ -441,7 +447,6 @@
 					// console.log(this.lotteryDetall.lastAwards);
 					// console.log(last_t.timer);
 					// console.log(this.lotteryDetall.newLottery.lotteryNumber);
-					this._getAwardsHistory();
 				} catch (error) {
 					console.error(error);
 					this.isLastLottery = true;
@@ -501,6 +506,10 @@
 					Toast("请选择玩法和输入金额再确认投注！");
 					return;
 				}
+        if(this.bettingList.obj.length<=0){
+					Toast("this.bettingList.obj.length<=0");
+					return;
+				}
 				this.overlayShow = true;
 				this.bettingList.obj.map((item) => {
 					if (this._playtype == "三不同号") {
@@ -521,6 +530,7 @@
 						params.push(param);
 					}
 				});
+
 				if (params.length <= 0) {
 					numArr.sort((a, b) => {
 						const end = a - b;
@@ -546,6 +556,7 @@
 					this.overlayShow = false;
           this._refreshUserInfo()
 					if (res.code != "200") return;
+          this.Refresh()
 					Toast("投注成功！");
 					// console.log(res);
 				});
@@ -621,6 +632,7 @@
 						sum % 2 == 0 ? (item.ds = "双") : (item.ds = "单");
 					});
 					this.RecordsList = res.data.records;
+          this.showDialog = true
 				});
 			},
 
@@ -633,6 +645,7 @@
 					price: [],
 					obj: [],
 				};
+				this.SumBettingList = [];
 				this.bettingNumber = 0;
 				this.playTypeNumber = 1;
 				this.number = 0;
@@ -758,7 +771,7 @@
 				//数据接收
 				if (this.$route.name != "Lottery") this.websock.close();
 				let str = e.data;
-				console.log(JSON.parse(str));
+				// console.log(JSON.parse(str));
 				if (str.length > 2) {
 					this.lotteryDetall = JSON.parse(str);
 				}

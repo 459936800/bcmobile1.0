@@ -72,7 +72,7 @@
             {name:'投注',key:'lotteryWayName'},
             {name:'注数',key:'bettingNumber'},
             {name:'每注金额',key:'bettingPrice'},
-            {name:'投注时间',key:'bettingTime'},
+            {name:'投注时间',key:'bettingTimeStr'},
           ],
           tableBody:[]
         },
@@ -166,6 +166,11 @@
 							} else if(item.status == "UNWIN") {
 								item.bgcolor = "grey";
 							}
+              let date = new Date(item.bettingTime)
+              item.bettingTimeStr=date.toLocaleString()+""
+              // console.log(item.bettingTimeStr); // 年月日时分秒
+              // console.log(date.toLocaleTimeString());//时分秒
+              // console.log(date.toLocaleDateString());//年月日
               item.status = this._getStatus(item.status)
 						});
 						this.page++;

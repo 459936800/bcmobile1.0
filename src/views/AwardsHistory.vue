@@ -74,7 +74,7 @@ export default {
           {name:'期号',key:'lotteryNumber'},
           {name:'彩票号码',key:'lotteryCode'},
           {name:'开奖号码',key:'lotteryValue'},
-          {name:'开奖时间',key:'lotteryTime'},
+          {name:'开奖时间',key:'lotteryTimeStr'},
         ],
         tableBody:[]
       },
@@ -137,14 +137,10 @@ export default {
         let data =res.data.records
         this.table.tableBody = data;
         // console.log(this.table.tableBody);
-        // this.table.tableBody.map(item => {
-        // 		if (item.status == "WIN") {
-        // 			item.bgcolor = "red";
-        // 		} else {
-        // 			item.bgcolor = "grey";
-        // 		}
-        //     item.status = this._getStatus(item.status)
-        // 	});
+        this.table.tableBody.map(item => {
+          let date = new Date(item.lotteryTime)
+          item.lotteryTimeStr=date.toLocaleString()+""
+        	});
         // this.page++;
         // } else {
           // this.finished = true;

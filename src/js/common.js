@@ -45,7 +45,7 @@ let methods = {
 	back(router) {
 		router.go(-1);
 	},
-	getTimer(Time, sysTime) {
+	getTimer(Time, sysTime = Time) {
 		let timer = 0;
 		let today = new Date(sysTime);
 		let day = new Date(Time);
